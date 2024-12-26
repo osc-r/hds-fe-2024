@@ -280,7 +280,7 @@ export default function ListPage() {
           >
             เพิ่มรายวิชาที่เปิดสอน
           </Button>
-          <Button variant="outlined" color="info" sx={{ ml: 2 }}>
+          <Button variant="outlined" color="info" sx={{ ml: 2 }} disabled>
             นำเข้าข้อมูล
           </Button>
         </Grid>
