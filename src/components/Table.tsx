@@ -26,11 +26,12 @@ export type TableColumnProps<T> = {
   headerCellProps?: TableCellProps;
   cellProps?: TableCellProps;
   render?: React.FC<T>;
-  sort?: any;
+  sort?: (fieldName: string, dir: string | null) => void;
 };
 
 export type TableProps<T> = {
   columns: TableColumnProps<T>[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any[];
   rowSxProps?: (row: T) => SxProps<Theme>;
   loading?: boolean;
@@ -85,13 +86,13 @@ const HeaderCell = <T,>({ header }: { header: TableColumnProps<T> }) => {
       onClick={() => {
         setSortDirection((o) => {
           if (o === null) {
-            header.sort && header.sort(header.field, "desc");
+            if (header.sort) header.sort(header.field, "desc");
             return "DESC";
           } else if (o === "DESC") {
-            header.sort && header.sort(header.field, "asc");
+            if (header.sort) header.sort(header.field, "asc");
             return "ASC";
           } else {
-            header.sort && header.sort(header.field, null);
+            if (header.sort) header.sort(header.field, null);
             return null;
           }
         });
@@ -147,10 +148,10 @@ const Table = <T,>(props: TableProps<T>) => {
     if (isChecked) {
       const updated = props.data.map((_, i) => i);
       setSelected(updated);
-      props.onCheckChange && props.onCheckChange(updated);
+      if (props.onCheckChange) props.onCheckChange(updated);
     } else {
       setSelected([]);
-      props.onCheckChange && props.onCheckChange([]);
+      if (props.onCheckChange) props.onCheckChange([]);
     }
   };
 
@@ -165,14 +166,14 @@ const Table = <T,>(props: TableProps<T>) => {
           setSelectedAll(true);
         }
         const updated = [...o, i];
-        props.onCheckChange && props.onCheckChange(updated);
+        if (props.onCheckChange) props.onCheckChange(updated);
         return updated;
       });
     } else {
       setSelectedAll(false);
       setSelected((o) => {
         const updated = o.filter((j) => j !== i);
-        props.onCheckChange && props.onCheckChange(updated);
+        if (props.onCheckChange) props.onCheckChange(updated);
         return updated;
       });
     }
@@ -239,7 +240,7 @@ const Table = <T,>(props: TableProps<T>) => {
             onRowsPerPageChange={(e) => {
               const val = e.target.value as unknown as number;
               setSize(val);
-              props.onSizeChange && props.onSizeChange(val);
+              if (props.onSizeChange) props.onSizeChange(val);
             }}
             component="div"
             page={0}

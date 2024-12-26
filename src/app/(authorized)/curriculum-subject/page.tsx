@@ -114,7 +114,7 @@ export default function ListPage() {
   const selectedId = useRef("");
   const [queryKey, setQueryKey] = useState<SearchCurriculumSubjectFormType>();
 
-  const { isLoading, error, data, refetch } = useQuery<
+  const { isLoading, data, refetch } = useQuery<
     unknown,
     unknown,
     Holiday[],
@@ -160,7 +160,7 @@ export default function ListPage() {
     select: (data) => {
       const LANG = "th";
       const output: { label: string; value: string }[] = [];
-      for (let [key, value] of Object.entries(data)) {
+      for (const [key, value] of Object.entries(data)) {
         output.push({ label: value[LANG], value: key });
       }
       return output;
@@ -181,7 +181,7 @@ export default function ListPage() {
     select: (data) => {
       const LANG = "th";
       const output: { label: string; value: string }[] = [];
-      for (let [key, value] of Object.entries(data)) {
+      for (const [key, value] of Object.entries(data)) {
         output.push({ label: value[LANG], value: key });
       }
       return output;
@@ -202,7 +202,7 @@ export default function ListPage() {
     select: (data) => {
       const LANG = "th";
       const output: { label: string; value: string }[] = [];
-      for (let [key, value] of Object.entries(data)) {
+      for (const [key, value] of Object.entries(data)) {
         output.push({ label: value[LANG], value: key });
       }
       return output;
@@ -221,7 +221,7 @@ export default function ListPage() {
     select: (data) => {
       const LANG = "th";
       const output: { label: string; value: string }[] = [];
-      for (let [key, value] of Object.entries(data)) {
+      for (const [key, value] of Object.entries(data)) {
         output.push({ label: value[LANG], value: key });
       }
       return output;

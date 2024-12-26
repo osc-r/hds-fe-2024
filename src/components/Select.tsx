@@ -63,7 +63,7 @@ const Select = (props: SelectProps) => {
   const { placeholder, menu, onChange, value, ...rest } = props;
 
   const handleChange = (event: SelectChangeEvent) => {
-    onChange && onChange(event);
+    if (onChange) onChange(event);
   };
 
   return (

@@ -44,9 +44,9 @@ export type CreateSubjectOfferedDto = {
   grade: number;
   room: number;
   subject: Subject;
-  studentEnrollments: any[];
-  studentGradeRecords: any[];
-  workflowStatus: any[];
+  studentEnrollments: [];
+  studentGradeRecords: [];
+  workflowStatus: [];
 };
 
 export type SubjectOffered = CreateSubjectOfferedDto & RecordMetadata;

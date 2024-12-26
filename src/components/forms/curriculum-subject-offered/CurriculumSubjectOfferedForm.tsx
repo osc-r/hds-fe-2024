@@ -8,9 +8,7 @@ export type CurriculumSubjectOfferedFormType = CreateSubjectDto;
 
 const FORM_COMPONENTS = (
   menu1: Menu,
-  menu2: Menu,
-  menu3: Menu,
-  menu4: Menu
+  menu2: Menu
 ): FormComponent<CurriculumSubjectOfferedFormType>[] => [
   {
     name: "curriculum",
@@ -54,9 +52,7 @@ const CurriculumSubjectOfferedForm = (
       <FormRenderer
         components={FORM_COMPONENTS(
           props.academicTermOptions,
-          props.classOptions,
-          [],
-          []
+          props.classOptions
         )}
         onSubmit={props.onSubmit}
         initialData={props.initialData}

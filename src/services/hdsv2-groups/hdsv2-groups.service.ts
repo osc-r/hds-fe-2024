@@ -5,7 +5,7 @@ class Hdsv2GroupsService {
   getGroups() {
     return Client.instance.get<BaseResponse>(`/v1/hdsv2-groups`);
   }
-  getGroupsOption(format: string, dto?: any) {
+  getGroupsOption(format: string, dto?: unknown) {
     return Client.instance.get<BaseResponse>(
       `/v1/hdsv2-groups/option/${format}`,
       { params: dto }

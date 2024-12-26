@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import firebaseService from "../services/firebase";
 import { User } from "firebase/auth";
 import { useUserStore } from "../stores/user.store";
-import optionService from "../services/option/option.service";
 
 export default function LoginPage() {
   const router = useRouter();

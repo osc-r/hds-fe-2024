@@ -20,6 +20,7 @@ export default function EditPage() {
     queryKey: [`academicCalendar`, id],
     queryFn: () =>
       calendarService.getTermById(id as string).then((res) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { _id, __v, createdAt, updatedAt, ...rest } = res.data.data;
         return rest;
       }),

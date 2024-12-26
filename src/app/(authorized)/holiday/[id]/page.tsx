@@ -17,6 +17,7 @@ export default function EditPage() {
     queryKey: [`holiday`, id],
     queryFn: () =>
       calendarService.getHolidayById(id as string).then((res) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { _id, __v, createdAt, updatedAt, ...rest } = res.data.data;
         return rest;
       }),
