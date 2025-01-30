@@ -42,14 +42,16 @@ export type CreateSubjectOfferedDto = {
   academicTerm: string;
   degreeLevel: string;
   grade: number;
-  room: number;
+  room: number | null;
+  subjectList: string[];
+};
+
+export type SubjectOffered = Omit<CreateSubjectOfferedDto, ["subjectList"]> & {
   subject: Subject;
   studentEnrollments: [];
   studentGradeRecords: [];
   workflowStatus: [];
-};
-
-export type SubjectOffered = CreateSubjectOfferedDto & RecordMetadata;
+} & RecordMetadata;
 
 export type SearchSubjectOfferedDto = {
   academicTerm?: string;

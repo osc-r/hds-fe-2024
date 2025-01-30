@@ -265,7 +265,7 @@ export default function ListPage() {
   }, []);
 
   return (
-    <Container sx={{ padding: 4, height: "100%" }}>
+    <Container sx={{ padding: 4, display: "flex" }}>
       <Grid container spacing={2}>
         <Grid size={6}>
           <Typography

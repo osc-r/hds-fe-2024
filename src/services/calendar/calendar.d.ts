@@ -28,3 +28,5 @@ export type SearchHolidayDto = {
   academicYear?: string;
   month?: string;
 };
+
+export type TermOption = { [key: string]: { th: string; en: string } };

@@ -3,6 +3,7 @@ import { Option } from "../option/option";
 import { BaseResponse } from "../type";
 import {
   CreateSubjectDto,
+  CreateSubjectOfferedDto,
   SearchSubjectDto,
   SearchSubjectOfferedDto,
   Subject,
@@ -25,13 +26,18 @@ class SubjectService {
       `/v1/subject/option/subject-type`
     );
   }
-  createSubjectOffered() {
-    return Client.instance.post<BaseResponse>(`/v1/subject/offered`);
+  createSubjectOffered(dto: CreateSubjectOfferedDto) {
+    return Client.instance.post<BaseResponse>(`/v1/subject/offered`, dto);
   }
   getSubjectOffered(dto?: SearchSubjectOfferedDto) {
     return Client.instance.get<
       BaseResponse<{ result: SubjectOffered[]; totalRecord: number }>
     >(`/v1/subject/offered`, { params: dto });
+  }
+  getSubjectOfferedById(id: string) {
+    return Client.instance.get<BaseResponse<SubjectOffered>>(
+      `/v1/subject/offered/${id}`
+    );
   }
   groupEnroll() {
     return Client.instance.post<BaseResponse>(`/v1/subject/enroll/group`);
@@ -53,7 +59,9 @@ class SubjectService {
     );
   }
   getOfferedById(id: string) {
-    return Client.instance.get<BaseResponse>(`/v1/subject/offered/${id}`);
+    return Client.instance.get<BaseResponse<SubjectOffered>>(
+      `/v1/subject/offered/${id}`
+    );
   }
   updateOfferedById(id: string) {
     return Client.instance.put<BaseResponse>(`/v1/subject/offered/${id}`);

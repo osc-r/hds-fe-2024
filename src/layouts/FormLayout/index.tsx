@@ -7,7 +7,7 @@ type FormLayoutProps = PropsWithChildren & {
 
 export default function FormLayout(props: FormLayoutProps) {
   return (
-    <Container maxWidth="lg" sx={{ height: "100%", padding: 4 }}>
+    <Container maxWidth="lg" sx={{ padding: 4 }}>
       <Grid container spacing={2}>
         <Grid
           size={12}

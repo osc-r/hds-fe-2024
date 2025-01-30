@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosInstance } from "axios";
 import { useLoaderStore } from "../stores/loader.store";
 import { useUserStore } from "../stores/user.store";
+import firebaseService from "./firebase";
 
 class Client {
   static #instance: AxiosInstance;
@@ -45,7 +46,8 @@ class Client {
           Client.#pendingRequest = Client.#pendingRequest - 1;
         }
 
-        if (config.status === 401 || config.status === 403) {
+        if (config.status === 401) {
+          firebaseService.auth.currentUser?.getIdToken(true);
           Client.#pendingRequest = 0;
           getUserState().resetUser();
         }

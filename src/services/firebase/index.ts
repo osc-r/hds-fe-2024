@@ -3,7 +3,9 @@ import {
   Auth,
   AuthError,
   GoogleAuthProvider,
+  browserLocalPersistence,
   getAuth,
+  setPersistence,
   signInWithPopup,
   signOut,
 } from "firebase/auth";
@@ -37,6 +39,7 @@ class FirebaseService {
 
   async login() {
     try {
+      await setPersistence(this.auth, browserLocalPersistence);
       const result = await signInWithPopup(this.auth, provider);
       return { success: true, msg: null, payload: result };
     } catch (error: AuthError | unknown) {

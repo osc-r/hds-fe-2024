@@ -25,7 +25,7 @@ export type TableColumnProps<T> = {
   field: string;
   headerCellProps?: TableCellProps;
   cellProps?: TableCellProps;
-  render?: React.FC<T>;
+  render?: React.FC<T & { index: number }>;
   sort?: (fieldName: string, dir: string | null) => void;
 };
 

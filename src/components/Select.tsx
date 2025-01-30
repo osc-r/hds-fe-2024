@@ -78,7 +78,7 @@ const Select = (props: SelectProps) => {
         value={value || ""}
       >
         <MenuItem value="">
-          <em>None</em>
+          <em>-- None --</em>
         </MenuItem>
         {menu.map((menu, index) => {
           return (

@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Container,
+  Divider,
   Grid2 as Grid,
   Typography,
 } from "@mui/material";
@@ -156,9 +157,18 @@ export default function ListPage() {
   const handleCloseConfirmModal = () => setOpen(false);
 
   return (
-    <Container sx={{ padding: 4, height: "100%" }}>
+    <Container sx={{ padding: 4, display: "flex" }}>
       <Grid container spacing={2}>
-        <Grid size={12}>
+        {/* <Grid size={12}>
+          <Typography
+            sx={{ typography: { sm: "h5", xs: "h6" } }}
+            mb={{ sm: 2, xs: 1 }}
+          >
+            
+          </Typography>
+        </Grid> */}
+
+        <Grid size={6}>
           <Typography
             sx={{ typography: { sm: "h5", xs: "h6" } }}
             mb={{ sm: 2, xs: 1 }}
@@ -166,22 +176,25 @@ export default function ListPage() {
             ปฏิทินการศึกษา
           </Typography>
         </Grid>
+        <Grid size={6} textAlign={"right"}>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => {
+              router.push("/academic-calendar/create");
+            }}
+          >
+            เพิ่มปฎิทินการศึกษา
+          </Button>
+          <Button variant="outlined" color="info" sx={{ ml: 2 }} disabled>
+            พิมพ์
+          </Button>
+        </Grid>
+        <Grid size={12} mb={2}>
+          <Divider />
+        </Grid>
         <Grid size={12}>
           <Grid container spacing={2}>
-            <Grid size={{ sm: 6, xs: 12 }}>
-              <Button
-                variant="contained"
-                color="success"
-                onClick={() => {
-                  router.push("/academic-calendar/create");
-                }}
-              >
-                เพิ่มปฎิทินการศึกษา
-              </Button>
-              <Button variant="outlined" color="info" sx={{ ml: 2 }} disabled>
-                พิมพ์
-              </Button>
-            </Grid>
             <Grid size={12}>
               <Table
                 columns={columns(onClickEdit, onClickDelete)}

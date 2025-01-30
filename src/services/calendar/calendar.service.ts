@@ -6,6 +6,7 @@ import {
   Holiday,
   SearchHolidayDto,
   Term,
+  TermOption,
 } from "./calendar";
 
 class CalendarService {
@@ -46,7 +47,9 @@ class CalendarService {
     >(`/v1/calendar/term`);
   }
   getTermOptions() {
-    return Client.instance.get<BaseResponse>(`/v1/calendar/term/options`);
+    return Client.instance.get<BaseResponse<TermOption>>(
+      `/v1/calendar/term/options`
+    );
   }
   getTermById(id: string) {
     return Client.instance.get<BaseResponse<Term>>(`/v1/calendar/term/${id}`);

@@ -21,7 +21,7 @@ import {
   UseFormWatch,
 } from "react-hook-form";
 import styles from "./form-renderer.module.css";
-import { HTMLInputTypeAttribute, useEffect } from "react";
+import { HTMLInputTypeAttribute, PropsWithChildren, useEffect } from "react";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import Select from "../Select";
@@ -140,7 +140,7 @@ type FormRendererProps<T extends FieldValues> = {
   initialData?: T;
   isLoading?: boolean;
   hideDefaultAction?: boolean;
-};
+} & PropsWithChildren;
 
 const FormRenderer = <T extends FieldValues>(props: FormRendererProps<T>) => {
   const router = useRouter();
@@ -182,6 +182,8 @@ const FormRenderer = <T extends FieldValues>(props: FormRendererProps<T>) => {
           </Grid>
         );
       })}
+
+      {props.children}
 
       {props.hideDefaultAction ? null : (
         <Grid size={12}>

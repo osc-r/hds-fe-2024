@@ -25,7 +25,6 @@ import SearchCurriculumSubjectOfferedForm, {
 import { SubjectOffered } from "../../../services/subject/subject";
 
 const columns = (
-  onClickEdit: (id: string) => void,
   onClickDelete: (id: string) => void
 ): TableColumnProps<SubjectOffered>[] => [
   {
@@ -106,16 +105,6 @@ const columns = (
         <Box>
           <Button
             size="small"
-            onClick={() => {
-              onClickEdit(row._id);
-            }}
-            variant="outlined"
-            sx={{ marginRight: 1 }}
-          >
-            แก้ไข
-          </Button>
-          <Button
-            size="small"
             variant="outlined"
             color="error"
             onClick={() => {
@@ -175,6 +164,7 @@ export default function ListPage() {
           ["subject.code"]: code || undefined,
           ["subject.name"]: name || undefined,
           ["subject.subjectType"]: subjectType || undefined,
+          // limit: 10,
         })
         .then((res) => res.data.data.result);
     },
@@ -233,10 +223,6 @@ export default function ListPage() {
 
   const [open, setOpen] = useState(false);
 
-  const onClickEdit = (id: string) => {
-    router.push(`/curriculum-subject-offered/${id}`);
-  };
-
   const onClickDelete = (id: string) => {
     setOpen(true);
     selectedId.current = id;
@@ -260,7 +246,7 @@ export default function ListPage() {
   }, []);
 
   return (
-    <Container sx={{ padding: 4, height: "100%" }}>
+    <Container sx={{ padding: 4, display: "flex" }}>
       <Grid container spacing={2}>
         <Grid size={6}>
           <Typography
@@ -296,7 +282,7 @@ export default function ListPage() {
             />
             <Grid size={12}>
               <Table
-                columns={columns(onClickEdit, onClickDelete)}
+                columns={columns(onClickDelete)}
                 data={data || []}
                 onSizeChange={() => {}}
                 pagination={{

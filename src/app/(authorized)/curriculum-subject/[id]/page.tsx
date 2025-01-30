@@ -129,7 +129,7 @@ export default function EditPage() {
   };
 
   return (
-    <FormLayout title="เพิ่มรายวิชาของโรงเรียนสามัญ">
+    <FormLayout title="แก้ไขรายวิชาของโรงเรียนสามัญ">
       <Container maxWidth="md">
         <CurriculumSubjectForm
           onSubmit={onSubmit}
