@@ -1,21 +1,34 @@
 import Client from "../client";
+import { Option } from "../option/option";
 import { BaseResponse } from "../type";
+import {
+  Building,
+  CreateBuildingDto,
+  CreateRoomDto,
+  Room,
+} from "./class-scheduler";
 
 class ClassSchedulerService {
-  createBuilding() {
-    return Client.instance.post<BaseResponse>(`/v1/class-scheduler/building`);
+  createBuilding(dto: CreateBuildingDto) {
+    return Client.instance.post<BaseResponse>(
+      `/v1/class-scheduler/building`,
+      dto
+    );
   }
   getBuilding() {
-    return Client.instance.get<BaseResponse>(`/v1/class-scheduler/building`);
+    return Client.instance.get<
+      BaseResponse<{ result: Building[]; totalRecord: number }>
+    >(`/v1/class-scheduler/building`);
   }
   getBuildingById(id: string) {
-    return Client.instance.get<BaseResponse>(
+    return Client.instance.get<BaseResponse<Building>>(
       `/v1/class-scheduler/building/${id}`
     );
   }
-  updateBuildingById(id: string) {
+  updateBuildingById(id: string, dto: CreateBuildingDto) {
     return Client.instance.patch<BaseResponse>(
-      `/v1/class-scheduler/building/${id}`
+      `/v1/class-scheduler/building/${id}`,
+      dto
     );
   }
   deleteBuildingById(id: string) {
@@ -24,23 +37,28 @@ class ClassSchedulerService {
     );
   }
   //
-  createRoom() {
-    return Client.instance.post<BaseResponse>(`/v1/class-scheduler/room`);
+  createRoom(dto: CreateRoomDto) {
+    return Client.instance.post<BaseResponse>(`/v1/class-scheduler/room`, dto);
   }
   getRoom() {
-    return Client.instance.get<BaseResponse>(`/v1/class-scheduler/room`);
+    return Client.instance.get<
+      BaseResponse<{ result: Room[]; totalRecord: number }>
+    >(`/v1/class-scheduler/room`);
   }
   getRoomTypeOption() {
-    return Client.instance.get<BaseResponse>(
+    return Client.instance.get<BaseResponse<Option>>(
       `/v1/class-scheduler/room/options/room-type`
     );
   }
   getRoomById(id: string) {
-    return Client.instance.get<BaseResponse>(`/v1/class-scheduler/room/${id}`);
-  }
-  updateRoomById(id: string) {
-    return Client.instance.patch<BaseResponse>(
+    return Client.instance.get<BaseResponse<Room>>(
       `/v1/class-scheduler/room/${id}`
+    );
+  }
+  updateRoomById(id: string, dto: CreateRoomDto) {
+    return Client.instance.patch<BaseResponse>(
+      `/v1/class-scheduler/room/${id}`,
+      dto
     );
   }
   deleteRoomById(id: string) {

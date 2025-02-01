@@ -124,6 +124,7 @@ const getInputComponent = <T extends FieldValues>(
         <Select
           placeholder={component.label}
           menu={component.menu || []}
+          disabled={component.disabled}
           {...inputProps}
           value={select}
         />
@@ -158,7 +159,11 @@ const FormRenderer = <T extends FieldValues>(props: FormRendererProps<T>) => {
   };
 
   useEffect(() => {
-    if (props.initialData) reset({ ...props.initialData });
+    setTimeout(() => {
+      if (props.initialData) {
+        reset({ ...props.initialData });
+      }
+    }, 300);
   }, [props.initialData]);
 
   return (

@@ -57,6 +57,7 @@ type SelectProps = {
   onChange?: ChangeHandler;
   name?: string;
   value?: string;
+  disabled?: boolean;
 };
 
 const Select = (props: SelectProps) => {

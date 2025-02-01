@@ -5,9 +5,21 @@ import { DashboardLayout } from "@toolpad/core/DashboardLayout";
 import { Button, createTheme } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
+import CalendarViewWeekIcon from "@mui/icons-material/CalendarViewWeek";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { usePathname, useRouter } from "next/navigation";
 
 const NAVIGATION: Navigation = [
+  {
+    kind: "header",
+    title: "นักเรียน",
+  },
+  {
+    title: "เพิ่มนักเรียนในภาคเรียน",
+    icon: <PersonAddIcon />,
+    segment: "add-student",
+  },
+  { kind: "divider" },
   {
     kind: "header",
     title: "จัดการข้อมูลโรงเรียน",
@@ -37,6 +49,36 @@ const NAVIGATION: Navigation = [
     title: "รายวิชาที่เปิดสอน",
     icon: <MenuBookIcon />,
     segment: "curriculum-subject-offered",
+  },
+  { kind: "divider" },
+  {
+    kind: "header",
+    title: "ระบบตารางเรียนตารางสอน",
+  },
+  {
+    title: "คาบเรียน",
+    icon: <CalendarViewWeekIcon />,
+    segment: "study-period",
+  },
+  {
+    title: "อาคารเรียน",
+    icon: <CalendarViewWeekIcon />,
+    segment: "classroom-building",
+  },
+  {
+    title: "ห้องเรียน",
+    icon: <CalendarViewWeekIcon />,
+    segment: "classroom",
+  },
+  {
+    title: "โฮมรูมและกิจกรรมอื่นๆ",
+    icon: <CalendarViewWeekIcon />,
+    segment: "activity",
+  },
+  {
+    title: "ตารางเรียนตารางสอน",
+    icon: <CalendarViewWeekIcon />,
+    segment: "break",
   },
 ];
 
