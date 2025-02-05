@@ -5,6 +5,8 @@ import {
   CreateHolidayDto,
   Holiday,
   SearchHolidayDto,
+  SearchStudentGroupByTermIdDto,
+  StudentGroup,
   Term,
   TermOption,
 } from "./calendar";
@@ -63,10 +65,10 @@ class CalendarService {
     );
   }
   //
-  getStudentGroupByTermId(termId: string) {
-    return Client.instance.get<BaseResponse>(
-      `/v1/calendar/term/${termId}/student-group`
-    );
+  getStudentGroupByTermId(termId: string, dto?: SearchStudentGroupByTermIdDto) {
+    return Client.instance.get<
+      BaseResponse<{ result: StudentGroup[]; totalRecord: number }>
+    >(`/v1/calendar/term/${termId}/student-group`, { params: dto });
   }
   createStudentGroupByTermId(termId: string) {
     return Client.instance.post<BaseResponse>(

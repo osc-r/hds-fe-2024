@@ -62,3 +62,32 @@ export type SearchSubjectOfferedDto = {
   grade?: string;
   room?: string;
 };
+
+export type SearchEnrollmentByGroupDto = {
+  academicTerm: string;
+  degreeLevel?: string;
+  grade?: string;
+  room?: string;
+};
+
+export type EnrollmentByGroup = {
+  isOpenForEnrollment: boolean;
+  studentGroup: {
+    name: {
+      th: string;
+      en: string;
+    };
+    degreeLevel: string;
+    grade: number;
+    room: number;
+  };
+  program: string;
+  studentInProgramCount: number;
+  offeredCount: number;
+  offered: object[];
+};
+
+export type GroupEnrollDto = {
+  studentIds: string[];
+  offeredSubjectIds: string[];
+};

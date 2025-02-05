@@ -10,3 +10,5 @@ export type RecordMetadata = {
   updatedAt: string;
   __v: number;
 };
+
+export type Locale = Record<[lang: string], string>;

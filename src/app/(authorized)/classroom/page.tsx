@@ -11,10 +11,12 @@ import {
 import { useRouter } from "next/navigation";
 import Table, { TableColumnProps } from "@/components/Table";
 import React, { useRef, useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
 import ConfirmModal from "@/components/modals/confirm";
-import classSchedulerService from "../../../services/class-scheduler/class-scheduler.service";
 import { Building } from "../../../services/class-scheduler/class-scheduler";
+import {
+  useDeleteRoomById,
+  useGetRooms,
+} from "../../../services/class-scheduler/class-scheduler.hook";
 
 const columns = (
   onClickEdit: (id: string) => void,
@@ -63,7 +65,7 @@ const columns = (
     cellProps: { align: "center" },
     render: (row) => {
       return (
-        <Box>
+        <Box sx={{ width: 150 }}>
           <Button
             size="small"
             onClick={() => {
@@ -94,29 +96,11 @@ export default function ListPage() {
   const router = useRouter();
   const selectedId = useRef("");
 
-  const { isLoading, data, refetch } = useQuery<
-    unknown,
-    unknown,
-    Building[],
-    string[]
-  >({
-    queryKey: ["classroom"],
-    queryFn: () => {
-      return classSchedulerService
-        .getRoom()
-        .then((res) => res.data.data.result);
-    },
-    initialData: [],
-  });
+  const { isLoading, data, refetch } = useGetRooms();
 
-  const { mutate, isPending } = useMutation<unknown, unknown, string>({
-    mutationFn: async (id) => {
-      return (await classSchedulerService.deleteRoomById(id)).data;
-    },
-    onSuccess: () => {
-      handleCloseConfirmModal();
-      refetch();
-    },
+  const { mutate, isPending } = useDeleteRoomById(() => {
+    handleCloseConfirmModal();
+    refetch();
   });
 
   const [open, setOpen] = useState(false);

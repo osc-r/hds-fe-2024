@@ -1,3 +1,3 @@
 export type Option = {
-  [key: string]: { th: string; en: string };
+  [key: string]: Record<string, string>;
 };

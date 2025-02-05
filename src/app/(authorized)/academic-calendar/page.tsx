@@ -11,11 +11,13 @@ import {
 import { useRouter } from "next/navigation";
 import Table, { TableColumnProps } from "@/components/Table";
 import React, { useRef, useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import calendarService from "../../../services/calendar/calendar.service";
 import { Term } from "../../../services/calendar/calendar";
 import dayjs from "dayjs";
 import ConfirmModal from "@/components/modals/confirm";
+import {
+  useDeleteTermById,
+  useGetTerms,
+} from "../../../services/calendar/calendar.hook";
 
 const columns = (
   onClickEdit: (id: string) => void,
@@ -123,20 +125,11 @@ export default function ListPage() {
   const router = useRouter();
   const selectedId = useRef("");
 
-  const { isLoading, data, refetch } = useQuery<unknown, unknown, Term[]>({
-    queryKey: ["academicCalendar"],
-    queryFn: () =>
-      calendarService.getTerms().then((res) => res.data.data.result),
-  });
+  const { isLoading, data, refetch } = useGetTerms();
 
-  const { mutate, isPending } = useMutation<unknown, unknown, string>({
-    mutationFn: async (id) => {
-      return (await calendarService.deleteTermById(id)).data;
-    },
-    onSuccess: () => {
-      handleCloseConfirmModal();
-      refetch();
-    },
+  const { mutate, isPending } = useDeleteTermById(() => {
+    handleCloseConfirmModal();
+    refetch();
   });
 
   const [open, setOpen] = useState(false);

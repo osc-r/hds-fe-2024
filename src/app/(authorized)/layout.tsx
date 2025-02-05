@@ -7,19 +7,20 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import CalendarViewWeekIcon from "@mui/icons-material/CalendarViewWeek";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import { usePathname, useRouter } from "next/navigation";
 
 const NAVIGATION: Navigation = [
-  {
-    kind: "header",
-    title: "นักเรียน",
-  },
-  {
-    title: "เพิ่มนักเรียนในภาคเรียน",
-    icon: <PersonAddIcon />,
-    segment: "add-student",
-  },
-  { kind: "divider" },
+  // {
+  //   kind: "header",
+  //   title: "นักเรียน",
+  // },
+  // {
+  //   title: "เพิ่มนักเรียนในภาคเรียน",
+  //   icon: <PersonAddIcon />,
+  //   segment: "add-student",
+  // },
+  // { kind: "divider" },
   {
     kind: "header",
     title: "จัดการข้อมูลโรงเรียน",
@@ -55,11 +56,11 @@ const NAVIGATION: Navigation = [
     kind: "header",
     title: "ระบบตารางเรียนตารางสอน",
   },
-  {
-    title: "คาบเรียน",
-    icon: <CalendarViewWeekIcon />,
-    segment: "study-period",
-  },
+  // {
+  //   title: "คาบเรียน",
+  //   icon: <CalendarViewWeekIcon />,
+  //   segment: "study-period",
+  // },
   {
     title: "อาคารเรียน",
     icon: <CalendarViewWeekIcon />,
@@ -75,11 +76,26 @@ const NAVIGATION: Navigation = [
     icon: <CalendarViewWeekIcon />,
     segment: "activity",
   },
+  // {
+  //   title: "ตารางเรียนตารางสอน",
+  //   icon: <CalendarViewWeekIcon />,
+  //   segment: "break",
+  // },
+  { kind: "divider" },
   {
-    title: "ตารางเรียนตารางสอน",
-    icon: <CalendarViewWeekIcon />,
-    segment: "break",
+    kind: "header",
+    title: "ระบบลงทะเบียนเรียน",
   },
+  {
+    title: "ลงทะเบียนเรียนตามชั้นเรียน",
+    icon: <AppRegistrationIcon />,
+    segment: "enrollment-group",
+  },
+  // {
+  //   title: "ลงทะเบียน/เพิ่ม/ถอน รายบุคคล",
+  //   icon: <AppRegistrationIcon />,
+  //   segment: "study-period",
+  // },
 ];
 
 export default function RootLayout(

@@ -4,39 +4,20 @@ import AcademicCalendarForm, {
   AcademicCalendarFormType,
 } from "@/components/forms/academic-calendar/AcademicCalendarForm";
 import FormLayout from "../../../../layouts/FormLayout";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import calendarService from "../../../../services/calendar/calendar.service";
 import { useParams, useRouter } from "next/navigation";
 import { SubmitHandler } from "react-hook-form";
+import {
+  useGetTermById,
+  useUpdateTermById,
+} from "../../../../services/calendar/calendar.hook";
 
 export default function EditPage() {
   const router = useRouter();
   const { id } = useParams();
-  const { data, isLoading } = useQuery<
-    unknown,
-    unknown,
-    AcademicCalendarFormType
-  >({
-    queryKey: [`academicCalendar`, id],
-    queryFn: () =>
-      calendarService.getTermById(id as string).then((res) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { _id, __v, createdAt, updatedAt, ...rest } = res.data.data;
-        return rest;
-      }),
-  });
+  const { data, isLoading } = useGetTermById(id as string);
 
-  const { isPending, mutate } = useMutation<
-    unknown,
-    unknown,
-    AcademicCalendarFormType
-  >({
-    mutationFn: async (body) => {
-      return (await calendarService.updateTermById(id as string, body)).data;
-    },
-    onSuccess: () => {
-      router.back();
-    },
+  const { isPending, mutate } = useUpdateTermById(id as string, () => {
+    router.back();
   });
 
   const onSubmit: SubmitHandler<AcademicCalendarFormType> = (formData) => {

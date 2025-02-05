@@ -15,6 +15,7 @@ import {
   CircularProgress,
   Typography,
   Grid2 as Grid,
+  Box,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
@@ -49,6 +50,8 @@ export type TableProps<T> = {
   numberSxProps?: { cell: SxProps<Theme>; header: SxProps<Theme> };
   checkboxSxProps?: SxProps<Theme>;
   containerSxProps?: SxProps<Theme>;
+  tableMinWidth?: null | number;
+  hideCheckAll?: boolean;
 };
 
 const defaultCellSx = {
@@ -185,9 +188,11 @@ const Table = <T,>(props: TableProps<T>) => {
   }, [props.data]);
 
   useEffect(() => {
-    if (props.checkedIndex && props.checkedIndex.length === 0) {
-      setSelectedAll(false);
-      setSelected([]);
+    if (props.checkedIndex) {
+      setSelected(props.checkedIndex);
+      if (props.checkedIndex.length === 0) {
+        setSelectedAll(false);
+      }
     }
   }, [props.checkedIndex]);
 
@@ -292,13 +297,16 @@ const Table = <T,>(props: TableProps<T>) => {
   return (
     <React.Fragment>
       <Grid container spacing={2} sx={{ mb: 1 }}>
-        {props.onCheckChange && (
-          <Grid size={{ xs: 12, md: 0.5 }}>
-            <Checkbox
-              color="primary"
-              checked={selectedAll}
-              onChange={onChangeSelectAll}
-            />
+        {props.onCheckChange && !props.hideCheckAll && (
+          <Grid size={{ xs: 12, md: 12 }}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Checkbox
+                color="primary"
+                checked={selectedAll}
+                onChange={onChangeSelectAll}
+              />
+              <Typography>เลือกทั้งหมด</Typography>
+            </Box>
           </Grid>
         )}
         <Grid size={{ xs: 12, md: props.onCheckChange ? 7.5 : 8 }}>
@@ -327,7 +335,10 @@ const Table = <T,>(props: TableProps<T>) => {
         <TableContainer component={Paper} sx={{ ...props.containerSxProps }}>
           <MuiTable
             sx={{
-              minWidth: 650,
+              minWidth:
+                props.tableMinWidth === null
+                  ? undefined
+                  : props.tableMinWidth || 650,
             }}
             aria-label="simple table"
           >

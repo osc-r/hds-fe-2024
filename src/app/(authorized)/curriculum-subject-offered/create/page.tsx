@@ -12,10 +12,9 @@ import CurriculumSubjectOfferedForm, {
 import { Option } from "../../../../services/option/option";
 import optionService from "../../../../services/option/option.service";
 import hdsv2GroupsService from "../../../../services/hdsv2-groups/hdsv2-groups.service";
-import calendarService from "../../../../services/calendar/calendar.service";
-import { TermOption } from "../../../../services/calendar/calendar";
 import { GroupOption } from "../../../../services/hdsv2-groups/hdsv2-groups";
 import { useState } from "react";
+import { useGetTermOptions } from "../../../../services/calendar/calendar.hook";
 
 export default function CreatePage() {
   const router = useRouter();
@@ -35,24 +34,7 @@ export default function CreatePage() {
     },
   });
 
-  const { data: termOptions } = useQuery<
-    TermOption,
-    unknown,
-    { label: string; value: string }[]
-  >({
-    queryKey: ["termOptions"],
-    queryFn: () => {
-      return calendarService.getTermOptions().then((res) => res.data.data);
-    },
-    select: (data) => {
-      const LANG = "th";
-      const output: { label: string; value: string }[] = [];
-      for (const [key, value] of Object.entries(data)) {
-        output.push({ label: value[LANG], value: key });
-      }
-      return output;
-    },
-  });
+  const { data: termOptions } = useGetTermOptions("th");
 
   const { data: classOptions } = useQuery<
     GroupOption[],
@@ -143,13 +125,14 @@ export default function CreatePage() {
     delete formData.subject;
     delete formData._subjectList;
 
-    selectedClass &&
+    if (selectedClass) {
       mutate({
         ...formData,
         subjectList,
         grade: parseInt(selectedClass?.data.grade) || 0,
         room: parseInt(selectedClass?.data.room) || 0,
       });
+    }
   };
 
   return (

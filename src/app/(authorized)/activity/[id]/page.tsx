@@ -9,8 +9,7 @@ import ActivityForm, {
   ActivityFormType,
 } from "@/components/forms/activity/ActivityForm";
 import nonAcademicActivityService from "../../../../services/non-academic-activity/non-academic-activity.service";
-import { TermOption } from "../../../../services/calendar/calendar";
-import calendarService from "../../../../services/calendar/calendar.service";
+import { useGetTermOptions } from "../../../../services/calendar/calendar.hook";
 
 export default function EditPage() {
   const router = useRouter();
@@ -45,25 +44,7 @@ export default function EditPage() {
     }
   );
 
-  const { data: termOptions } = useQuery<
-    TermOption,
-    unknown,
-    { label: string; value: string }[]
-  >({
-    queryKey: ["termOptions"],
-    queryFn: () => {
-      return calendarService.getTermOptions().then((res) => res.data.data);
-    },
-    select: (data) => {
-      const LANG = "th";
-      const output: { label: string; value: string }[] = [];
-      for (const [key, value] of Object.entries(data)) {
-        output.push({ label: value[LANG], value: key });
-      }
-      return output;
-    },
-    initialData: {},
-  });
+  const { data: termOptions } = useGetTermOptions("th");
 
   const onSubmit: SubmitHandler<ActivityFormType> = (formData) => {
     mutate(formData);

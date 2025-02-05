@@ -4,6 +4,9 @@ import { BaseResponse } from "../type";
 import {
   CreateSubjectDto,
   CreateSubjectOfferedDto,
+  EnrollmentByGroup,
+  GroupEnrollDto,
+  SearchEnrollmentByGroupDto,
   SearchSubjectDto,
   SearchSubjectOfferedDto,
   Subject,
@@ -39,8 +42,8 @@ class SubjectService {
       `/v1/subject/offered/${id}`
     );
   }
-  groupEnroll() {
-    return Client.instance.post<BaseResponse>(`/v1/subject/enroll/group`);
+  groupEnroll(dto: GroupEnrollDto) {
+    return Client.instance.post<BaseResponse>(`/v1/subject/enroll/group`, dto);
   }
   groupWithdraw() {
     return Client.instance.post<BaseResponse>(`/v1/subject/withdraw/group`);
@@ -48,9 +51,10 @@ class SubjectService {
   individualEnroll() {
     return Client.instance.post<BaseResponse>(`/v1/subject/enroll/individual`);
   }
-  getEnrollmentByGroup() {
-    return Client.instance.get<BaseResponse>(
-      `/v1/subject/offered/enrollment-by-group`
+  getEnrollmentByGroup(dto: SearchEnrollmentByGroupDto) {
+    return Client.instance.get<BaseResponse<EnrollmentByGroup[]>>(
+      `/v1/subject/offered/enrollment-by-group`,
+      { params: dto }
     );
   }
   getEnrollmentByStudentId(studentId: string) {

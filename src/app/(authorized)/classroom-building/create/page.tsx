@@ -2,27 +2,17 @@
 
 import FormLayout from "../../../../layouts/FormLayout";
 import { SubmitHandler } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { Container } from "@mui/material";
 import ClassroomBuildingForm, {
   ClassroomBuildingFormType,
 } from "@/components/forms/classroom-building/ClassroomBuildingForm";
-import classSchedulerService from "../../../../services/class-scheduler/class-scheduler.service";
+import { useCreateBuilding } from "../../../../services/class-scheduler/class-scheduler.hook";
 
 export default function CreatePage() {
   const router = useRouter();
-  const { isPending, mutate } = useMutation<
-    unknown,
-    unknown,
-    ClassroomBuildingFormType
-  >({
-    mutationFn: async (body) => {
-      return (await classSchedulerService.createBuilding(body)).data;
-    },
-    onSuccess: () => {
-      router.back();
-    },
+  const { isPending, mutate } = useCreateBuilding(() => {
+    router.back();
   });
 
   const onSubmit: SubmitHandler<ClassroomBuildingFormType> = (formData) => {

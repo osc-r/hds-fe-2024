@@ -12,8 +12,6 @@ import {
 import { useRouter } from "next/navigation";
 import Table, { TableColumnProps } from "@/components/Table";
 import React, { useEffect, useRef, useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import calendarService from "../../../services/calendar/calendar.service";
 import { Holiday } from "../../../services/calendar/calendar";
 import dayjs from "dayjs";
 import ConfirmModal from "@/components/modals/confirm";
@@ -21,6 +19,10 @@ import SearchHolidayForm, {
   SearchHolidayFormType,
 } from "@/components/forms/holiday/SearchHolidayForm";
 import { SubmitHandler } from "react-hook-form";
+import {
+  useDeleteHolidayById,
+  useGetHolidays,
+} from "../../../services/calendar/calendar.hook";
 
 const columns = (
   onClickEdit: (id: string) => void,
@@ -95,33 +97,14 @@ export default function ListPage() {
   const selectedId = useRef("");
   const [queryKey, setQueryKey] = useState<SearchHolidayFormType>();
 
-  const { isLoading, data, refetch } = useQuery<
-    unknown,
-    unknown,
-    Holiday[],
-    string[]
-  >({
-    queryKey: ["holiday", queryKey?.academicYear || "", queryKey?.month || ""],
-    queryFn: ({ queryKey }) => {
-      const [, academicYear, month] = queryKey;
-      return calendarService
-        .getHolidays({
-          academicYear: academicYear || undefined,
-          month: month || undefined,
-        })
-        .then((res) => res.data.data.result);
-    },
-    enabled: false,
-  });
+  const { isLoading, data, refetch } = useGetHolidays(
+    queryKey?.academicYear,
+    queryKey?.month
+  );
 
-  const { mutate, isPending } = useMutation<unknown, unknown, string>({
-    mutationFn: async (id) => {
-      return (await calendarService.deleteHolidayById(id)).data;
-    },
-    onSuccess: () => {
-      handleCloseConfirmModal();
-      refetch();
-    },
+  const { mutate, isPending } = useDeleteHolidayById(() => {
+    handleCloseConfirmModal();
+    refetch();
   });
 
   const [open, setOpen] = useState(false);

@@ -1,4 +1,11 @@
-import { Container, Grid2 as Grid, Typography } from "@mui/material";
+import {
+  Container,
+  Grid2 as Grid,
+  IconButton,
+  Typography,
+} from "@mui/material";
+import { ArrowLeftIcon } from "@mui/x-date-pickers";
+import { useRouter } from "next/navigation";
 import { PropsWithChildren } from "react";
 
 type FormLayoutProps = PropsWithChildren & {
@@ -6,6 +13,7 @@ type FormLayoutProps = PropsWithChildren & {
 };
 
 export default function FormLayout(props: FormLayoutProps) {
+  const router = useRouter();
   return (
     <Container maxWidth="lg" sx={{ padding: 4 }}>
       <Grid container spacing={2}>
@@ -13,10 +21,12 @@ export default function FormLayout(props: FormLayoutProps) {
           size={12}
           display={"flex"}
           alignItems={"center"}
-          justifyContent={"space-between"}
           mb={{ sm: 2, xs: 1 }}
         >
-          <Typography sx={{ typography: { sm: "h5", xs: "h6" } }}>
+          <IconButton color="primary" onClick={router.back}>
+            <ArrowLeftIcon />
+          </IconButton>
+          <Typography sx={{ typography: { sm: "h5", xs: "h6" }, ml: 2 }}>
             {props.title}
           </Typography>
         </Grid>

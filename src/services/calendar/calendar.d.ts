@@ -29,4 +29,51 @@ export type SearchHolidayDto = {
   month?: string;
 };
 
-export type TermOption = { [key: string]: { th: string; en: string } };
+export type TermOption = { [key: string]: Record<string, string> };
+
+export type Student = {
+  _id: string;
+  idx: string;
+  code: string;
+  program: string;
+  prefix: {
+    th: string;
+    en: string;
+  };
+  firstName: {
+    th: string;
+    en: string;
+  };
+  middleName: {
+    th: string;
+    en: string;
+  };
+  lastName: {
+    th: string;
+    en: string;
+  };
+  nickname: {
+    th: string;
+    en: string;
+  };
+  email: string;
+  attendedDate: string;
+  status: string;
+};
+
+export type StudentGroup = {
+  academicTerm: string;
+  degreeLevel: string;
+  grade: number;
+  room: number;
+  students: Student[];
+  th: string;
+  en: string;
+  studentsCount: number;
+} & RecordMetadata;
+
+export type SearchStudentGroupByTermIdDto = {
+  degreeLevel: string;
+  grade: string;
+  room: string;
+};
