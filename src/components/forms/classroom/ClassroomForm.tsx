@@ -2,6 +2,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import FormRenderer, { FormComponent } from "../FormRenderer";
 import { FormProps } from "../form";
 import { CreateRoomDto } from "../../../services/class-scheduler/class-scheduler";
+import { moreThan, requiredField } from "../validation";
 
 export type ClassroomFormType = CreateRoomDto;
 
@@ -25,6 +26,9 @@ const FORM_COMPONENTS = (
     labelSize: 4,
     inputSize: 7,
     menu: menu1,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "name",
@@ -34,6 +38,9 @@ const FORM_COMPONENTS = (
     size: 12,
     labelSize: 4,
     inputSize: 7,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "floorNo",
@@ -44,6 +51,10 @@ const FORM_COMPONENTS = (
     labelSize: 4,
     inputSize: 7,
     htmlInputType: "number",
+    validate: {
+      required: requiredField,
+      moreThan: moreThan(0),
+    },
   },
   {
     name: "studyCapacity",
@@ -54,6 +65,10 @@ const FORM_COMPONENTS = (
     labelSize: 4,
     inputSize: 7,
     htmlInputType: "number",
+    validate: {
+      required: requiredField,
+      moreThan: moreThan(0),
+    },
   },
   {
     name: "examCapacity",
@@ -64,6 +79,10 @@ const FORM_COMPONENTS = (
     labelSize: 4,
     inputSize: 7,
     htmlInputType: "number",
+    validate: {
+      required: requiredField,
+      moreThan: moreThan(0),
+    },
   },
   {
     name: "roomType",
@@ -74,6 +93,9 @@ const FORM_COMPONENTS = (
     labelSize: 4,
     inputSize: 7,
     menu: menu2,
+    validate: {
+      required: requiredField,
+    },
   },
 ];
 

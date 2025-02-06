@@ -9,7 +9,8 @@ import { RequiredOptions } from "./type";
 export type SearchCurriculumSubjectOfferedFormType = SearchSubjectOfferedDto;
 
 const FORM_COMPONENTS = (
-  menu1: Menu
+  menu1: Menu,
+  menu2: Menu
 ): FormComponent<SearchCurriculumSubjectOfferedFormType>[] => [
   {
     name: "academicTerm",
@@ -51,7 +52,7 @@ const FORM_COMPONENTS = (
     size: 6,
     labelSize: 0,
     inputSize: 12,
-    menu: menu1,
+    menu: menu2,
   },
 ];
 
@@ -64,7 +65,10 @@ const SearchCurriculumSubjectOfferedForm = (
     <React.Fragment>
       <FormProvider {...methods}>
         <FormRenderer
-          components={FORM_COMPONENTS(props.academicTermOptions)}
+          components={FORM_COMPONENTS(
+            props.academicTermOptions,
+            props.classOptions
+          )}
           onSubmit={props.onSubmit}
           initialData={props.initialData}
           isLoading={props.isLoading}

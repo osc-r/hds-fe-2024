@@ -2,6 +2,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import FormRenderer, { FormComponent } from "../FormRenderer";
 import { FormProps } from "../form";
 import { CreateNonAcademicActivityDto } from "../../../services/non-academic-activity/non-academic-activity";
+import { requiredField } from "../validation";
 
 export type ActivityFormType = CreateNonAcademicActivityDto;
 
@@ -20,6 +21,9 @@ const FORM_COMPONENTS = (
     size: 12,
     labelSize: 4,
     inputSize: 7,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "name.en",
@@ -29,6 +33,9 @@ const FORM_COMPONENTS = (
     size: 12,
     labelSize: 4,
     inputSize: 7,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "description",

@@ -2,6 +2,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { CreateHolidayDto } from "../../../services/calendar/calendar";
 import FormRenderer, { FormComponent } from "../FormRenderer";
 import { FormProps } from "../form";
+import { requiredField } from "../validation";
 
 export type HolidayFormType = CreateHolidayDto;
 
@@ -14,6 +15,9 @@ const FORM_COMPONENTS: FormComponent<HolidayFormType>[] = [
     size: 12,
     labelSize: 3,
     inputSize: 7,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "name.en",
@@ -23,6 +27,9 @@ const FORM_COMPONENTS: FormComponent<HolidayFormType>[] = [
     size: 12,
     labelSize: 3,
     inputSize: 7,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "date",
@@ -32,6 +39,9 @@ const FORM_COMPONENTS: FormComponent<HolidayFormType>[] = [
     size: 12,
     labelSize: 3,
     inputSize: 7,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "havingOnlineClass",

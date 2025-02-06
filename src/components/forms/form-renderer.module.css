@@ -1,3 +1,7 @@
-.mui-date-picker > div > div {
+.mui-date-picker > div > div,
+.mui-date-picker-error > div > div {
   height: 40px;
+}
+.mui-date-picker-error > div > div > fieldset {
+  border-color: red;
 }

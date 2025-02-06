@@ -111,7 +111,7 @@ export const useGetHolidays = (academicYear?: string, month?: string) =>
   useQuery({
     queryKey: [KEY, "getHolidays", academicYear || "", month || ""],
     queryFn: ({ queryKey }) => {
-      const [, academicYear, month] = queryKey;
+      const [, , academicYear, month] = queryKey;
       return calendarService
         .getHolidays({
           academicYear: academicYear || undefined,
@@ -139,7 +139,7 @@ export const useGetStudentGroupByTermId = (
       room || "",
     ],
     queryFn: ({ queryKey }) => {
-      const [, academicTerm, degreeLevel, grade, room] = queryKey;
+      const [, , academicTerm, degreeLevel, grade, room] = queryKey;
       return calendarService
         .getStudentGroupByTermId(academicTerm, { degreeLevel, grade, room })
         .then((res) => res.data.data.result);

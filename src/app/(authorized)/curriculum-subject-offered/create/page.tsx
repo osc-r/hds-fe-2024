@@ -114,6 +114,50 @@ export default function CreatePage() {
     },
   });
 
+  const { data: subjectAreaOptions } = useQuery<
+    Option,
+    unknown,
+    { label: string; value: string }[]
+  >({
+    queryKey: ["subjectAreaOptions"],
+    queryFn: () => {
+      return subjectService
+        .getSubjectAreaOptions()
+        .then((res) => res.data.data);
+    },
+    select: (data) => {
+      const LANG = "th";
+      const output: { label: string; value: string }[] = [];
+      for (const [key, value] of Object.entries(data)) {
+        output.push({ label: value[LANG], value: key });
+      }
+      return output;
+    },
+    initialData: {},
+  });
+
+  const { data: subjectTypeOptions } = useQuery<
+    Option,
+    unknown,
+    { label: string; value: string }[]
+  >({
+    queryKey: ["subjectTypeOptions"],
+    queryFn: () => {
+      return subjectService
+        .getSubjectTypeOptions()
+        .then((res) => res.data.data);
+    },
+    select: (data) => {
+      const LANG = "th";
+      const output: { label: string; value: string }[] = [];
+      for (const [key, value] of Object.entries(data)) {
+        output.push({ label: value[LANG], value: key });
+      }
+      return output;
+    },
+    initialData: {},
+  });
+
   const onSubmit: SubmitHandler<CurriculumSubjectOfferedFormType> = (
     formData
   ) => {
@@ -145,6 +189,8 @@ export default function CreatePage() {
           degreeLevelOptions={degreeOptions || []}
           classOptions={classOptions || []}
           subjectOptions={subjectOptions || []}
+          subjectAreaOptions={subjectAreaOptions}
+          subjectTypeOptions={subjectTypeOptions}
           onDegreeLevelChange={(_degreeLevel) => {
             setDegreeLevel(_degreeLevel);
           }}

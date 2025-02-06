@@ -23,8 +23,23 @@ import SearchCurriculumSubjectOfferedForm, {
   SearchCurriculumSubjectOfferedFormType,
 } from "@/components/forms/curriculum-subject-offered/SearchCurriculumSubjectOfferedForm";
 import { SubjectOffered } from "../../../services/subject/subject";
+import { useGetTermOptions } from "../../../services/calendar/calendar.hook";
+import { GroupOption } from "../../../services/hdsv2-groups/hdsv2-groups";
+import hdsv2GroupsService from "../../../services/hdsv2-groups/hdsv2-groups.service";
 
 const columns = (
+  subjectAreaOptions: {
+    label: string;
+    value: string;
+  }[],
+  subjectTypeOptions: {
+    label: string;
+    value: string;
+  }[],
+  degreeOptions: {
+    label: string;
+    value: string;
+  }[],
   onClickDelete: (id: string) => void
 ): TableColumnProps<SubjectOffered>[] => [
   {
@@ -33,7 +48,8 @@ const columns = (
     headerCellProps: { align: "center" },
     cellProps: { align: "center" },
     render: (row) => {
-      return `${row.degreeLevel}-${row.grade}/${row.room}`;
+      const val = degreeOptions.find((i) => i.value === row.degreeLevel);
+      return `${val?.label}-${row.grade}/${row.room}`;
     },
   },
   {
@@ -65,6 +81,12 @@ const columns = (
       align: "center",
       style: { maxWidth: 120, wordBreak: "break-word" },
     },
+    render: (row) => {
+      const val = subjectTypeOptions.find(
+        (i) => i.value === row.subject.subjectType
+      );
+      return val?.label;
+    },
   },
   {
     field: "subject.subjectAreas",
@@ -73,6 +95,12 @@ const columns = (
     cellProps: {
       align: "center",
       style: { maxWidth: 120, wordBreak: "break-word" },
+    },
+    render: (row) => {
+      const val = subjectAreaOptions.find(
+        (i) => i.value === row.subject.subjectAreas
+      );
+      return val?.label;
     },
   },
   {
@@ -192,6 +220,50 @@ export default function ListPage() {
     },
   });
 
+  const { data: subjectAreaOptions } = useQuery<
+    Option,
+    unknown,
+    { label: string; value: string }[]
+  >({
+    queryKey: ["subjectAreaOptions"],
+    queryFn: () => {
+      return subjectService
+        .getSubjectAreaOptions()
+        .then((res) => res.data.data);
+    },
+    select: (data) => {
+      const LANG = "th";
+      const output: { label: string; value: string }[] = [];
+      for (const [key, value] of Object.entries(data)) {
+        output.push({ label: value[LANG], value: key });
+      }
+      return output;
+    },
+    initialData: {},
+  });
+
+  const { data: subjectTypeOptions } = useQuery<
+    Option,
+    unknown,
+    { label: string; value: string }[]
+  >({
+    queryKey: ["subjectTypeOptions"],
+    queryFn: () => {
+      return subjectService
+        .getSubjectTypeOptions()
+        .then((res) => res.data.data);
+    },
+    select: (data) => {
+      const LANG = "th";
+      const output: { label: string; value: string }[] = [];
+      for (const [key, value] of Object.entries(data)) {
+        output.push({ label: value[LANG], value: key });
+      }
+      return output;
+    },
+    initialData: {},
+  });
+
   const { data: degreeOptions } = useQuery<
     Option,
     unknown,
@@ -209,6 +281,51 @@ export default function ListPage() {
       }
       return output;
     },
+    initialData: {},
+  });
+
+  const { data: termOptions } = useGetTermOptions("th");
+
+  const { data: classOptions } = useQuery<
+    GroupOption[],
+    unknown,
+    {
+      label: string;
+      value: string;
+      data: {
+        degreeLevel: string;
+        grade: string;
+        room: string;
+      };
+    }[]
+  >({
+    queryKey: ["classOptions"],
+    queryFn: (ctx) => {
+      return hdsv2GroupsService
+        .getGroupsOption("full")
+        .then((res) => res.data.data.result);
+    },
+    select: (data) => {
+      const LANG = "th";
+      const output: {
+        label: string;
+        value: string;
+        data: {
+          degreeLevel: string;
+          grade: string;
+          room: string;
+        };
+      }[] = [];
+      data.forEach((item) => {
+        output.push({
+          label: item[LANG],
+          value: item.queryString,
+          data: item.query,
+        });
+      });
+      return output;
+    },
+    initialData: [],
   });
 
   const { mutate, isPending } = useMutation<unknown, unknown, string>({
@@ -277,12 +394,17 @@ export default function ListPage() {
           <Grid container spacing={2}>
             <SearchCurriculumSubjectOfferedForm
               onSubmit={onSearch}
-              academicTermOptions={coreCurriculumOptions || []}
-              classOptions={degreeOptions || []}
+              academicTermOptions={termOptions || []}
+              classOptions={classOptions || []}
             />
             <Grid size={12}>
               <Table
-                columns={columns(onClickDelete)}
+                columns={columns(
+                  subjectAreaOptions,
+                  subjectTypeOptions,
+                  degreeOptions,
+                  onClickDelete
+                )}
                 data={data || []}
                 onSizeChange={() => {}}
                 pagination={{

@@ -2,6 +2,7 @@ import FormRenderer, { FormComponent } from "../FormRenderer";
 import { FormProps } from "../form";
 import { CreateAcademicCalendarDto } from "../../../services/calendar/calendar";
 import { FormProvider, useForm } from "react-hook-form";
+import { requiredField } from "../validation";
 
 export type AcademicCalendarFormType = CreateAcademicCalendarDto & {
   finalTermStartDate?: null | string;
@@ -17,6 +18,9 @@ const FORM_COMPONENTS: FormComponent<AcademicCalendarFormType>[] = [
     disabled: false,
     size: 6,
     htmlInputType: "number",
+    validate: {
+      required: requiredField,
+    },
   },
   { name: "", label: "", type: "EMPTY", disabled: false, size: 6 },
   {
@@ -26,6 +30,9 @@ const FORM_COMPONENTS: FormComponent<AcademicCalendarFormType>[] = [
     disabled: false,
     size: 6,
     htmlInputType: "number",
+    validate: {
+      required: requiredField,
+    },
   },
   { name: "", label: "", type: "EMPTY", disabled: false, size: 6 },
   {
@@ -34,6 +41,9 @@ const FORM_COMPONENTS: FormComponent<AcademicCalendarFormType>[] = [
     type: "DATE_PICKER",
     disabled: false,
     size: 6,
+    validate: {
+      required: requiredField,
+    },
   },
   { name: "", label: "", type: "EMPTY", disabled: false, size: 6 },
   {
@@ -42,6 +52,9 @@ const FORM_COMPONENTS: FormComponent<AcademicCalendarFormType>[] = [
     type: "DATE_PICKER",
     disabled: false,
     size: 6,
+    validate: {
+      required: requiredField,
+    },
   },
   { name: "", label: "", type: "EMPTY", disabled: false, size: 6 },
   {
@@ -50,6 +63,9 @@ const FORM_COMPONENTS: FormComponent<AcademicCalendarFormType>[] = [
     type: "DATE_PICKER",
     disabled: false,
     size: 6,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "midtermEndDate",

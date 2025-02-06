@@ -1,6 +1,7 @@
 import {
   CreateSubjectOfferedDto,
   Subject,
+  SubjectOffered,
 } from "../../../services/subject/subject";
 import FormRenderer, { FormComponent } from "../FormRenderer";
 import { FormProps, Menu } from "../form";
@@ -14,6 +15,7 @@ import { RequiredOptions } from "./type";
 import { Box, Button, Grid2 as Grid } from "@mui/material";
 import Table, { TableColumnProps } from "@/components/Table";
 import { useCallback, useEffect } from "react";
+import { requiredField } from "../validation";
 
 export type CurriculumSubjectOfferedFormType = CreateSubjectOfferedDto & {
   subject?: string;
@@ -35,6 +37,9 @@ const FORM_COMPONENTS = (
     labelSize: 2.5,
     inputSize: 7,
     menu: menu1,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "degreeLevel",
@@ -45,6 +50,9 @@ const FORM_COMPONENTS = (
     labelSize: 2.5,
     inputSize: 7,
     menu: menu2,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "grade",
@@ -55,6 +63,9 @@ const FORM_COMPONENTS = (
     labelSize: 2.5,
     inputSize: 7,
     menu: menu3,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "subject",
@@ -65,20 +76,32 @@ const FORM_COMPONENTS = (
     labelSize: 2.5,
     inputSize: 7,
     menu: menu4,
+    validate: {
+      required: requiredField,
+    },
   },
 ];
 
 const columns = (
+  lang: string,
+  subjectAreaOptions: {
+    label: string;
+    value: string;
+  }[],
+  subjectTypeOptions: {
+    label: string;
+    value: string;
+  }[],
   onClickDelete: (index: number) => void
-): TableColumnProps<Subject>[] => [
+): TableColumnProps<SubjectOffered>[] => [
   {
-    field: "subject.code.th",
+    field: `subject.code.${lang}`,
     headerName: "รหัสวิชา",
     headerCellProps: { align: "center" },
     cellProps: { align: "center" },
   },
   {
-    field: "subject.name.th",
+    field: `subject.name.${lang}`,
     headerName: "ชื่อวิชา",
     headerCellProps: { align: "center" },
     cellProps: {
@@ -100,6 +123,12 @@ const columns = (
       align: "center",
       style: { maxWidth: 120, wordBreak: "break-word" },
     },
+    render: (row) => {
+      const val = subjectTypeOptions.find(
+        (i) => i.value === row.subject.subjectType
+      );
+      return val?.label;
+    },
   },
   {
     field: "subject.subjectAreas",
@@ -108,6 +137,12 @@ const columns = (
     cellProps: {
       align: "center",
       style: { maxWidth: 120, wordBreak: "break-word" },
+    },
+    render: (row) => {
+      const val = subjectAreaOptions.find(
+        (i) => i.value === row.subject.subjectAreas
+      );
+      return val?.label;
     },
   },
   {
@@ -150,6 +185,14 @@ const CurriculumSubjectOfferedForm = (
     RequiredOptions & {
       degreeLevelOptions: { label: string; value: string }[];
       subjectOptions: { label: string; value: string; data: Subject }[];
+      subjectAreaOptions: {
+        label: string;
+        value: string;
+      }[];
+      subjectTypeOptions: {
+        label: string;
+        value: string;
+      }[];
       onDegreeLevelChange: (degreeLevel: string) => void;
     }
 ) => {
@@ -226,7 +269,12 @@ const CurriculumSubjectOfferedForm = (
           <br />
           <br />
           <Table
-            columns={columns(onClickDeleteSubject)}
+            columns={columns(
+              "th",
+              props.subjectAreaOptions,
+              props.subjectTypeOptions,
+              onClickDeleteSubject
+            )}
             data={subjectList || []}
             showNumber
           />

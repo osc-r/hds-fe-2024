@@ -12,16 +12,24 @@ import { useRouter } from "next/navigation";
 import Table, { TableColumnProps } from "@/components/Table";
 import React, { useRef, useState } from "react";
 import ConfirmModal from "@/components/modals/confirm";
-import { Building } from "../../../services/class-scheduler/class-scheduler";
+import {
+  Building,
+  Room,
+} from "../../../services/class-scheduler/class-scheduler";
 import {
   useDeleteRoomById,
   useGetRooms,
+  useGetRoomTypeOption,
 } from "../../../services/class-scheduler/class-scheduler.hook";
 
 const columns = (
+  roomOptions: {
+    label: string;
+    value: string;
+  }[],
   onClickEdit: (id: string) => void,
   onClickDelete: (id: string) => void
-): TableColumnProps<Building>[] => [
+): TableColumnProps<Room>[] => [
   {
     field: "building.name",
     headerName: "Classroom building",
@@ -39,6 +47,10 @@ const columns = (
     headerName: "Type of classroom",
     headerCellProps: { align: "center" },
     cellProps: { align: "center" },
+    render: (row) => {
+      const val = roomOptions.find((i) => i.value === row.roomType);
+      return val?.label;
+    },
   },
   {
     field: "floorNo",
@@ -97,6 +109,8 @@ export default function ListPage() {
   const selectedId = useRef("");
 
   const { isLoading, data, refetch } = useGetRooms();
+  const { isLoading: isLoadingRoomOption, data: roomOptions } =
+    useGetRoomTypeOption("th");
 
   const { mutate, isPending } = useDeleteRoomById(() => {
     handleCloseConfirmModal();
@@ -152,7 +166,7 @@ export default function ListPage() {
           <Grid container spacing={2}>
             <Grid size={12}>
               <Table
-                columns={columns(onClickEdit, onClickDelete)}
+                columns={columns(roomOptions, onClickEdit, onClickDelete)}
                 data={data || []}
                 onSizeChange={() => {}}
                 pagination={{

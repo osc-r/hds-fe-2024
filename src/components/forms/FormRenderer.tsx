@@ -3,7 +3,9 @@ import {
   Button,
   Checkbox,
   CircularProgress,
+  FormControl,
   FormControlLabel,
+  FormHelperText,
   Grid2 as Grid,
   TextField,
   TextFieldVariants,
@@ -15,10 +17,12 @@ import {
   FieldErrors,
   FieldValues,
   Path,
+  PathValue,
   SubmitHandler,
   useFormContext,
   UseFormRegister,
   UseFormWatch,
+  Validate,
 } from "react-hook-form";
 import styles from "./form-renderer.module.css";
 import { HTMLInputTypeAttribute, PropsWithChildren, useEffect } from "react";
@@ -45,6 +49,26 @@ export type FormComponent<T> = {
   htmlInputType?: HTMLInputTypeAttribute;
   menu?: { label: string; value: string }[];
   variant?: TextFieldVariants;
+  validate?:
+    | Validate<PathValue<T, Path<T>>, T>
+    | Record<string, Validate<PathValue<T, Path<T>>, T>>;
+};
+
+const getError = <T extends FieldValues>(
+  name: string,
+  errors: FieldErrors<T>
+) => {
+  const propertyName = name.split(".");
+  const getValue = (_name: string[], _errors: FieldErrors<T>) => {
+    const key = _name.shift() || "";
+    if (_name.length === 0) {
+      if (_errors && _errors[key]) return _errors[key]?.message;
+      else return undefined;
+    } else {
+      return getValue(_name, _errors[key] as unknown as FieldErrors<T>);
+    }
+  };
+  return getValue(propertyName, errors);
 };
 
 const getInputComponent = <T extends FieldValues>(
@@ -59,11 +83,13 @@ const getInputComponent = <T extends FieldValues>(
   const inputProps = {
     ...register(component.name as Path<T>, {
       valueAsNumber: component.htmlInputType === "number",
+      validate: component.validate,
     }),
   };
 
   switch (component.type) {
     case "TEXT_INPUT":
+      const errorMsg = getError(component.name, errors) as string;
       return (
         <TextField
           label={component.variant ? component.label : undefined}
@@ -74,8 +100,8 @@ const getInputComponent = <T extends FieldValues>(
           onChange={(e) => {
             inputProps.onChange(e);
           }}
-          error={!!errors[component.name]}
-          helperText={errors[component.name]?.message as string}
+          error={!!errorMsg}
+          helperText={errorMsg}
           disabled={component.disabled}
           type={component.htmlInputType}
         />
@@ -83,27 +109,40 @@ const getInputComponent = <T extends FieldValues>(
     case "DATE_PICKER":
       const dateString = watch(inputProps.name);
       return (
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <div className={styles["mui-date-picker"]}>
-            <MobileDatePicker
-              sx={{ width: "100%" }}
-              disabled={component.disabled}
-              {...inputProps}
-              showDaysOutsideCurrentMonth
-              onAccept={(date) => {
-                inputProps.onChange({
-                  target: {
-                    name: component.name,
-                    value: date?.toISOString(),
-                  },
-                  type: "change",
-                });
-              }}
-              onChange={() => {}}
-              value={dateString ? dayjs(dateString) : null}
-            />
-          </div>
-        </LocalizationProvider>
+        <FormControl>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <div
+              className={
+                styles[
+                  !!errors[component.name]
+                    ? "mui-date-picker-error"
+                    : "mui-date-picker"
+                ]
+              }
+            >
+              <MobileDatePicker
+                sx={{ width: "100%", borderColor: "red" }}
+                disabled={component.disabled}
+                {...inputProps}
+                showDaysOutsideCurrentMonth
+                onAccept={(date) => {
+                  inputProps.onChange({
+                    target: {
+                      name: component.name,
+                      value: date?.toISOString(),
+                    },
+                    type: "change",
+                  });
+                }}
+                onChange={() => {}}
+                value={dateString ? dayjs(dateString) : null}
+              />
+            </div>
+          </LocalizationProvider>
+          <FormHelperText error={!!errors[component.name]}>
+            {errors[component.name]?.message as string}
+          </FormHelperText>
+        </FormControl>
       );
     case "CHECKBOX":
       const checked = watch(inputProps.name);
@@ -127,6 +166,7 @@ const getInputComponent = <T extends FieldValues>(
           disabled={component.disabled}
           {...inputProps}
           value={select}
+          errorMessage={errors[component.name]?.message as string}
         />
       );
     case "EMPTY":

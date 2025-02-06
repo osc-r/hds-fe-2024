@@ -2,6 +2,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import FormRenderer, { FormComponent } from "../FormRenderer";
 import { FormProps } from "../form";
 import { CreateBuildingDto } from "../../../services/class-scheduler/class-scheduler";
+import { moreThan, requiredField } from "../validation";
 
 export type ClassroomBuildingFormType = CreateBuildingDto;
 
@@ -16,6 +17,9 @@ const FORM_COMPONENTS = (
     size: 12,
     labelSize: 3,
     inputSize: 7,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "totalFloor",
@@ -26,6 +30,10 @@ const FORM_COMPONENTS = (
     labelSize: 3,
     inputSize: 7,
     htmlInputType: "number",
+    validate: {
+      required: requiredField,
+      moreThan: moreThan(0),
+    },
   },
 ];
 

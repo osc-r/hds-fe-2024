@@ -6,7 +6,12 @@
 // import SelectMui, { SelectChangeEvent } from "@mui/material/Select";
 // import { FormHelperText } from "@mui/material";
 
-import { FormControl, InputLabel, MenuItem } from "@mui/material";
+import {
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+} from "@mui/material";
 import SelectMui, { SelectChangeEvent } from "@mui/material/Select";
 import { ChangeHandler } from "react-hook-form";
 
@@ -58,10 +63,11 @@ type SelectProps = {
   name?: string;
   value?: string;
   disabled?: boolean;
+  errorMessage?: string;
 };
 
 const Select = (props: SelectProps) => {
-  const { placeholder, menu, onChange, value, ...rest } = props;
+  const { placeholder, menu, onChange, value, errorMessage, ...rest } = props;
 
   const handleChange = (event: SelectChangeEvent) => {
     if (onChange) onChange(event);
@@ -77,6 +83,7 @@ const Select = (props: SelectProps) => {
         {...rest}
         onChange={handleChange}
         value={value || ""}
+        error={!!errorMessage}
       >
         <MenuItem value="">
           <em>-- None --</em>
@@ -89,6 +96,9 @@ const Select = (props: SelectProps) => {
           );
         })}
       </SelectMui>
+      {errorMessage && (
+        <FormHelperText error={!!errorMessage}>{errorMessage}</FormHelperText>
+      )}
     </FormControl>
   );
 };

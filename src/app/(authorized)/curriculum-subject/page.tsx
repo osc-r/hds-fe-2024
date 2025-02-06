@@ -12,7 +12,6 @@ import { useRouter } from "next/navigation";
 import Table, { TableColumnProps } from "@/components/Table";
 import React, { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Holiday } from "../../../services/calendar/calendar";
 import ConfirmModal from "@/components/modals/confirm";
 import { SubmitHandler } from "react-hook-form";
 import subjectService from "../../../services/subject/subject.service";
@@ -24,6 +23,20 @@ import { Option } from "../../../services/option/option";
 import { Subject } from "../../../services/subject/subject";
 
 const columns = (
+  lang: string,
+  subjectAreaOptions: {
+    label: string;
+    value: string;
+  }[],
+  subjectTypeOptions: {
+    label: string;
+    value: string;
+  }[],
+
+  degreeOptions: {
+    label: string;
+    value: string;
+  }[],
   onClickEdit: (id: string) => void,
   onClickDelete: (id: string) => void
 ): TableColumnProps<Subject>[] => [
@@ -34,7 +47,7 @@ const columns = (
     cellProps: { align: "center" },
   },
   {
-    field: "name.th",
+    field: `name.${lang}`,
     headerName: "ชื่อวิชา",
     headerCellProps: { align: "center" },
     cellProps: { align: "center" },
@@ -50,6 +63,10 @@ const columns = (
     headerName: "ระดับการศึกษา",
     headerCellProps: { align: "center" },
     cellProps: { align: "center" },
+    render: (row) => {
+      const val = degreeOptions.find((i) => i.value === row.degreeLevel);
+      return val?.label;
+    },
   },
   {
     field: "subjectType",
@@ -59,6 +76,10 @@ const columns = (
       align: "center",
       style: { maxWidth: 160, wordBreak: "break-word" },
     },
+    render: (row) => {
+      const val = subjectTypeOptions.find((i) => i.value === row.subjectType);
+      return val?.label;
+    },
   },
   {
     field: "subjectAreas",
@@ -67,6 +88,10 @@ const columns = (
     cellProps: {
       align: "center",
       style: { maxWidth: 160, wordBreak: "break-word" },
+    },
+    render: (row) => {
+      const val = subjectAreaOptions.find((i) => i.value === row.subjectAreas);
+      return val?.label;
     },
   },
   {
@@ -117,7 +142,7 @@ export default function ListPage() {
   const { isLoading, data, refetch } = useQuery<
     unknown,
     unknown,
-    Holiday[],
+    Subject[],
     string[]
   >({
     queryKey: [
@@ -165,6 +190,7 @@ export default function ListPage() {
       }
       return output;
     },
+    initialData: {},
   });
 
   const { data: subjectTypeOptions } = useQuery<
@@ -186,6 +212,7 @@ export default function ListPage() {
       }
       return output;
     },
+    initialData: {},
   });
 
   const { data: coreCurriculumOptions } = useQuery<
@@ -226,6 +253,7 @@ export default function ListPage() {
       }
       return output;
     },
+    initialData: {},
   });
 
   const { mutate, isPending } = useMutation<unknown, unknown, string>({
@@ -303,7 +331,14 @@ export default function ListPage() {
             />
             <Grid size={12}>
               <Table
-                columns={columns(onClickEdit, onClickDelete)}
+                columns={columns(
+                  "th",
+                  subjectAreaOptions,
+                  subjectTypeOptions,
+                  degreeOptions,
+                  onClickEdit,
+                  onClickDelete
+                )}
                 data={data || []}
                 onSizeChange={() => {}}
                 pagination={{

@@ -3,6 +3,7 @@ import FormRenderer, { FormComponent } from "../FormRenderer";
 import { FormProps, Menu } from "../form";
 import { FormProvider, useForm } from "react-hook-form";
 import { RequiredOptions } from "./type";
+import { moreThan, requiredField } from "../validation";
 
 export type CurriculumSubjectFormType = CreateSubjectDto;
 
@@ -21,6 +22,9 @@ const FORM_COMPONENTS = (
     labelSize: 2.5,
     inputSize: 9.5,
     menu: menu1,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "codeSuffix",
@@ -30,6 +34,9 @@ const FORM_COMPONENTS = (
     size: 6,
     labelSize: 5,
     inputSize: 7,
+    validate: {
+      required: requiredField,
+    },
   },
   { name: "", label: "", type: "EMPTY", disabled: false, size: 6 },
   {
@@ -40,6 +47,9 @@ const FORM_COMPONENTS = (
     size: 6,
     labelSize: 5,
     inputSize: 7,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "code.en",
@@ -49,6 +59,9 @@ const FORM_COMPONENTS = (
     size: 6,
     labelSize: 5,
     inputSize: 7,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "name.th",
@@ -58,6 +71,9 @@ const FORM_COMPONENTS = (
     size: 6,
     labelSize: 5,
     inputSize: 7,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "name.en",
@@ -67,6 +83,9 @@ const FORM_COMPONENTS = (
     size: 6,
     labelSize: 5,
     inputSize: 7,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "displayNameTranscript.th",
@@ -76,6 +95,9 @@ const FORM_COMPONENTS = (
     size: 6,
     labelSize: 5,
     inputSize: 7,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "displayNameTranscript.en",
@@ -85,6 +107,9 @@ const FORM_COMPONENTS = (
     size: 6,
     labelSize: 5,
     inputSize: 7,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "shortName.th",
@@ -94,6 +119,9 @@ const FORM_COMPONENTS = (
     size: 6,
     labelSize: 5,
     inputSize: 7,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "shortName.en",
@@ -103,6 +131,9 @@ const FORM_COMPONENTS = (
     size: 6,
     labelSize: 5,
     inputSize: 7,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "credit",
@@ -113,6 +144,10 @@ const FORM_COMPONENTS = (
     labelSize: 5,
     inputSize: 7,
     htmlInputType: "number",
+    validate: {
+      required: requiredField,
+      moreThan: moreThan(0),
+    },
   },
   { name: "", label: "", type: "EMPTY", disabled: false, size: 6 },
   {
@@ -124,6 +159,9 @@ const FORM_COMPONENTS = (
     labelSize: 5,
     inputSize: 7,
     menu: menu2,
+    validate: {
+      required: requiredField,
+    },
   },
   { name: "", label: "", type: "EMPTY", disabled: false, size: 6 },
   {
@@ -135,6 +173,9 @@ const FORM_COMPONENTS = (
     labelSize: 5,
     inputSize: 7,
     menu: menu3,
+    validate: {
+      required: requiredField,
+    },
   },
   { name: "", label: "", type: "EMPTY", disabled: false, size: 6 },
   {
@@ -146,6 +187,9 @@ const FORM_COMPONENTS = (
     labelSize: 5,
     inputSize: 7,
     menu: menu4,
+    validate: {
+      required: requiredField,
+    },
   },
   { name: "", label: "", type: "EMPTY", disabled: false, size: 6 },
   {
@@ -157,6 +201,10 @@ const FORM_COMPONENTS = (
     labelSize: 5,
     inputSize: 7,
     htmlInputType: "number",
+    validate: {
+      required: requiredField,
+      moreThan: moreThan(0),
+    },
   },
   { name: "", label: "", type: "EMPTY", disabled: false, size: 6 },
   {
@@ -168,6 +216,10 @@ const FORM_COMPONENTS = (
     labelSize: 5,
     inputSize: 7,
     htmlInputType: "number",
+    validate: {
+      required: requiredField,
+      moreThan: moreThan(0),
+    },
   },
 ];
 
