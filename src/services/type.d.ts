@@ -12,3 +12,12 @@ export type RecordMetadata = {
 };
 
 export type Locale = Record<[lang: string], string>;
+
+export type Pagination = {
+  sort?: string;
+  page?: number;
+  limit?: number;
+  offset?: number;
+};
+
+export type ListResponse<T> = { result: T[]; totalRecord: number };

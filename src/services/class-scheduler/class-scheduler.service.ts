@@ -1,6 +1,6 @@
 import Client from "../client";
 import { Option } from "../option/option";
-import { BaseResponse } from "../type";
+import { BaseResponse, ListResponse } from "../type";
 import {
   Building,
   CreateBuildingDto,
@@ -16,9 +16,9 @@ class ClassSchedulerService {
     );
   }
   getBuilding() {
-    return Client.instance.get<
-      BaseResponse<{ result: Building[]; totalRecord: number }>
-    >(`/v1/class-scheduler/building`);
+    return Client.instance.get<BaseResponse<ListResponse<Building>>>(
+      `/v1/class-scheduler/building`
+    );
   }
   getBuildingById(id: string) {
     return Client.instance.get<BaseResponse<Building>>(
@@ -41,9 +41,9 @@ class ClassSchedulerService {
     return Client.instance.post<BaseResponse>(`/v1/class-scheduler/room`, dto);
   }
   getRoom() {
-    return Client.instance.get<
-      BaseResponse<{ result: Room[]; totalRecord: number }>
-    >(`/v1/class-scheduler/room`);
+    return Client.instance.get<BaseResponse<ListResponse<Room>>>(
+      `/v1/class-scheduler/room`
+    );
   }
   getRoomTypeOption() {
     return Client.instance.get<BaseResponse<Option>>(

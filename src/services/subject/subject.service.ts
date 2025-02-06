@@ -1,6 +1,6 @@
 import Client from "../client";
 import { Option } from "../option/option";
-import { BaseResponse } from "../type";
+import { BaseResponse, ListResponse } from "../type";
 import {
   CreateSubjectDto,
   CreateSubjectOfferedDto,
@@ -33,9 +33,10 @@ class SubjectService {
     return Client.instance.post<BaseResponse>(`/v1/subject/offered`, dto);
   }
   getSubjectOffered(dto?: SearchSubjectOfferedDto) {
-    return Client.instance.get<
-      BaseResponse<{ result: SubjectOffered[]; totalRecord: number }>
-    >(`/v1/subject/offered`, { params: dto });
+    return Client.instance.get<BaseResponse<ListResponse<SubjectOffered>>>(
+      `/v1/subject/offered`,
+      { params: dto }
+    );
   }
   getSubjectOfferedById(id: string) {
     return Client.instance.get<BaseResponse<SubjectOffered>>(
@@ -77,9 +78,10 @@ class SubjectService {
     return Client.instance.post<BaseResponse>(`/v1/subject`, dto);
   }
   getSubjects(dto?: SearchSubjectDto) {
-    return Client.instance.get<
-      BaseResponse<{ result: Subject[]; totalRecord: number }>
-    >(`/v1/subject`, { params: dto });
+    return Client.instance.get<BaseResponse<ListResponse<Subject>>>(
+      `/v1/subject`,
+      { params: dto }
+    );
   }
   getSubjectById(id: string) {
     return Client.instance.get<BaseResponse<Subject>>(`/v1/subject/${id}`);

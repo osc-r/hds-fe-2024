@@ -1,5 +1,5 @@
 import Client from "../client";
-import { BaseResponse } from "../type";
+import { BaseResponse, ListResponse } from "../type";
 import {
   CreateNonAcademicActivityDto,
   NonAcademicActivity,
@@ -11,11 +11,12 @@ class NonAcademicActivityService {
     return Client.instance.post<BaseResponse>(`/v1/non-academic-activity`, dto);
   }
   getNonAcademicActivities(dto?: SearchNonAcademicActivityDto) {
-    return Client.instance.get<
-      BaseResponse<{ result: NonAcademicActivity[]; totalRecord: number }>
-    >(`/v1/non-academic-activity`, {
-      params: { ...dto, includeNoAcademicTerm: 1 },
-    });
+    return Client.instance.get<BaseResponse<ListResponse<NonAcademicActivity>>>(
+      `/v1/non-academic-activity`,
+      {
+        params: { ...dto, includeNoAcademicTerm: 1 },
+      }
+    );
   }
   getNonAcademicActivityById(id: string) {
     return Client.instance.get<BaseResponse<NonAcademicActivity>>(

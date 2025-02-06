@@ -1,5 +1,5 @@
 import Client from "../client";
-import { BaseResponse } from "../type";
+import { BaseResponse, ListResponse } from "../type";
 import {
   CreateAcademicCalendarDto,
   CreateHolidayDto,
@@ -18,9 +18,10 @@ class CalendarService {
     });
   }
   getHolidays(dto?: SearchHolidayDto) {
-    return Client.instance.get<
-      BaseResponse<{ result: Holiday[]; totalRecord: number }>
-    >(`/v1/calendar/holidays`, { params: dto });
+    return Client.instance.get<BaseResponse<ListResponse<Holiday>>>(
+      `/v1/calendar/holidays`,
+      { params: dto }
+    );
   }
   getHolidayById(id: string) {
     return Client.instance.get<BaseResponse<Holiday>>(
@@ -44,9 +45,9 @@ class CalendarService {
     return Client.instance.post<BaseResponse<id>>(`/v1/calendar/term`, dto);
   }
   getTerms() {
-    return Client.instance.get<
-      BaseResponse<{ result: Term[]; totalRecord: number }>
-    >(`/v1/calendar/term`);
+    return Client.instance.get<BaseResponse<ListResponse<Term>>>(
+      `/v1/calendar/term`
+    );
   }
   getTermOptions() {
     return Client.instance.get<BaseResponse<TermOption>>(
@@ -66,9 +67,10 @@ class CalendarService {
   }
   //
   getStudentGroupByTermId(termId: string, dto?: SearchStudentGroupByTermIdDto) {
-    return Client.instance.get<
-      BaseResponse<{ result: StudentGroup[]; totalRecord: number }>
-    >(`/v1/calendar/term/${termId}/student-group`, { params: dto });
+    return Client.instance.get<BaseResponse<ListResponse<StudentGroup>>>(
+      `/v1/calendar/term/${termId}/student-group`,
+      { params: dto }
+    );
   }
   createStudentGroupByTermId(termId: string) {
     return Client.instance.post<BaseResponse>(

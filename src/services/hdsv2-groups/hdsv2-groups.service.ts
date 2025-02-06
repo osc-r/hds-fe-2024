@@ -1,5 +1,5 @@
 import Client from "../client";
-import { BaseResponse } from "../type";
+import { BaseResponse, ListResponse } from "../type";
 import { GroupOption } from "./hdsv2-groups";
 
 class Hdsv2GroupsService {
@@ -7,9 +7,10 @@ class Hdsv2GroupsService {
     return Client.instance.get<BaseResponse>(`/v1/hdsv2-groups`);
   }
   getGroupsOption(format: string, dto?: unknown) {
-    return Client.instance.get<
-      BaseResponse<{ result: GroupOption[]; totalRecord: number }>
-    >(`/v1/hdsv2-groups/option/${format}`, { params: dto });
+    return Client.instance.get<BaseResponse<ListResponse<GroupOption>>>(
+      `/v1/hdsv2-groups/option/${format}`,
+      { params: dto }
+    );
   }
 }
 

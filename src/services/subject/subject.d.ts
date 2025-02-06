@@ -1,4 +1,4 @@
-import { RecordMetadata } from "../type";
+import { Pagination, RecordMetadata } from "../type";
 
 export type CreateSubjectDto = {
   curriculum: string;
@@ -29,7 +29,7 @@ export type CreateSubjectDto = {
 
 export type Subject = CreateSubjectDto & RecordMetadata;
 
-export type SearchSubjectDto = {
+export type SearchSubjectDto = Pagination & {
   curriculum?: string;
   code?: string;
   name?: string;
