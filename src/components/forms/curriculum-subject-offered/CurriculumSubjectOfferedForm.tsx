@@ -12,9 +12,9 @@ import {
   useForm,
 } from "react-hook-form";
 import { RequiredOptions } from "./type";
-import { Box, Button, Grid2 as Grid } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import Table, { TableColumnProps } from "@/components/Table";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { requiredField } from "../validation";
 
 export type CurriculumSubjectOfferedFormType = CreateSubjectOfferedDto & {
@@ -219,8 +219,8 @@ const CurriculumSubjectOfferedForm = (
       (i) => i.id === selectedSubjectId
     );
 
-    existedSubjectIndex >= 0 && remove(existedSubjectIndex);
-    selected && append({ id: selected.value, subject: selected.data });
+    if (existedSubjectIndex >= 0) remove(existedSubjectIndex);
+    if (selected) append({ id: selected.value, subject: selected.data });
 
     methods.resetField("subject");
   };

@@ -199,27 +199,6 @@ export default function ListPage() {
     enabled: false,
   });
 
-  const { data: coreCurriculumOptions } = useQuery<
-    Option,
-    unknown,
-    { label: string; value: string }[]
-  >({
-    queryKey: ["coreCurriculumOptions"],
-    queryFn: () => {
-      return subjectService
-        .getCoreCurriculumOptions()
-        .then((res) => res.data.data);
-    },
-    select: (data) => {
-      const LANG = "th";
-      const output: { label: string; value: string }[] = [];
-      for (const [key, value] of Object.entries(data)) {
-        output.push({ label: value[LANG], value: key });
-      }
-      return output;
-    },
-  });
-
   const { data: subjectAreaOptions } = useQuery<
     Option,
     unknown,
@@ -300,7 +279,7 @@ export default function ListPage() {
     }[]
   >({
     queryKey: ["classOptions"],
-    queryFn: (ctx) => {
+    queryFn: () => {
       return hdsv2GroupsService
         .getGroupsOption("full")
         .then((res) => res.data.data.result);

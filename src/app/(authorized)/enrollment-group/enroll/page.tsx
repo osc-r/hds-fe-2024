@@ -18,11 +18,7 @@ import {
   GroupEnrollDto,
   SubjectOffered,
 } from "../../../../services/subject/subject";
-import {
-  Student,
-  StudentGroup,
-  TermOption,
-} from "../../../../services/calendar/calendar";
+import { Student } from "../../../../services/calendar/calendar";
 import hdsv2GroupsService from "../../../../services/hdsv2-groups/hdsv2-groups.service";
 import { GroupOption } from "../../../../services/hdsv2-groups/hdsv2-groups";
 import Table, { TableColumnProps } from "@/components/Table";
@@ -31,6 +27,7 @@ import {
   useGetStudentGroupByTermId,
   useGetTermOptions,
 } from "../../../../services/calendar/calendar.hook";
+import { Suspense } from "react";
 
 const columns: TableColumnProps<Student>[] = [
   {
@@ -75,7 +72,7 @@ const subjectColumns: TableColumnProps<SubjectOffered>[] = [
   },
 ];
 
-export default function CreatePage() {
+function CreatePageComp() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [subjectOffered, setSubjectOffered] = useState<
@@ -339,5 +336,13 @@ export default function CreatePage() {
         {/* <HolidayForm onSubmit={onSubmit} isLoading={isPending} /> */}
       </Container>
     </FormLayout>
+  );
+}
+
+export default function CreatePage() {
+  return (
+    <Suspense>
+      <CreatePageComp />
+    </Suspense>
   );
 }

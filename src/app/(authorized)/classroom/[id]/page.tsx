@@ -23,13 +23,11 @@ export default function EditPage() {
     router.back();
   });
 
-  const { isLoading: isLoadingBuildingOption, data: buildingOptions } =
-    useGetBuilding((data) =>
-      data.map((i) => ({ label: i.name, value: i._id }))
-    );
+  const { data: buildingOptions } = useGetBuilding((data) =>
+    data.map((i) => ({ label: i.name, value: i._id }))
+  );
 
-  const { isLoading: isLoadingRoomOption, data: roomOptions } =
-    useGetRoomTypeOption("th");
+  const { data: roomOptions } = useGetRoomTypeOption("th");
 
   const onSubmit: SubmitHandler<ClassroomFormType> = (formData) => {
     mutate(formData);

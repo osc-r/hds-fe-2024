@@ -23,6 +23,7 @@ import {
   SearchEnrollmentByGroupDto,
 } from "../../../services/subject/subject";
 import { useGetTermOptions } from "../../../services/calendar/calendar.hook";
+import { Suspense } from "react";
 
 const columns = (
   onClickEdit: (degreeLevel?: string, grade?: string, room?: string) => void
@@ -83,7 +84,7 @@ const columns = (
   },
 ];
 
-export default function ListPage() {
+function ListPageComp() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -241,5 +242,13 @@ export default function ListPage() {
         </Grid>
       </Grid>
     </Container>
+  );
+}
+
+export default function ListPage() {
+  return (
+    <Suspense>
+      <ListPageComp />
+    </Suspense>
   );
 }

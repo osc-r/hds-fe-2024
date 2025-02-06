@@ -79,6 +79,7 @@ export const useCreateBuilding = (onSuccess: () => void) =>
     onSuccess,
   });
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const useGetBuilding = (selectFn?: (data: Building[]) => any) =>
   useQuery({
     queryKey: [KEY, "getBuilding"],

@@ -32,7 +32,8 @@ const FORM_COMPONENTS = (
     htmlInputType: "number",
     validate: {
       required: requiredField,
-      moreThan: moreThan(0),
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      moreThan: moreThan(0) as any,
     },
   },
 ];

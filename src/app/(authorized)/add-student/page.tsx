@@ -1,141 +1,130 @@
 "use client";
 
 import {
-  Box,
+  // Box,
   Button,
-  Checkbox,
+  // Checkbox,
   Container,
   Divider,
   Grid2 as Grid,
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import Table, { TableColumnProps } from "@/components/Table";
+// import { TableColumnProps } from "@/components/Table";
 import React, { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Holiday } from "../../../services/calendar/calendar";
 import ConfirmModal from "@/components/modals/confirm";
-import { SubmitHandler } from "react-hook-form";
 import subjectService from "../../../services/subject/subject.service";
-import optionService from "../../../services/option/option.service";
-import { Option } from "../../../services/option/option";
-import SearchCurriculumSubjectOfferedForm, {
-  SearchCurriculumSubjectOfferedFormType,
-} from "@/components/forms/curriculum-subject-offered/SearchCurriculumSubjectOfferedForm";
-import { SubjectOffered } from "../../../services/subject/subject";
+import { SearchCurriculumSubjectOfferedFormType } from "@/components/forms/curriculum-subject-offered/SearchCurriculumSubjectOfferedForm";
+// import { SubjectOffered } from "../../../services/subject/subject";
 import TransferList from "@/components/TransferList";
-import SearchStudentForm from "@/components/forms/add-student/SearchStudentForm";
 
-const columns = (
-  onClickDelete: (id: string) => void
-): TableColumnProps<SubjectOffered>[] => [
-  {
-    field: "",
-    headerName: "ชั้นเรียน",
-    headerCellProps: { align: "center" },
-    cellProps: { align: "center" },
-    render: (row) => {
-      return `${row.degreeLevel}-${row.grade}/${row.room}`;
-    },
-  },
-  {
-    field: "subject.code.th",
-    headerName: "รหัสวิชา",
-    headerCellProps: { align: "center" },
-    cellProps: { align: "center" },
-  },
-  {
-    field: "subject.name.th",
-    headerName: "ชื่อวิชา",
-    headerCellProps: { align: "center" },
-    cellProps: {
-      align: "center",
-      style: { maxWidth: 160, wordBreak: "break-word" },
-    },
-  },
-  {
-    field: "subject.credit",
-    headerName: "หน่วยกิต",
-    headerCellProps: { align: "center" },
-    cellProps: { align: "center" },
-  },
-  {
-    field: "subject.subjectType",
-    headerName: "ประเภทวิชา",
-    headerCellProps: { align: "center" },
-    cellProps: {
-      align: "center",
-      style: { maxWidth: 120, wordBreak: "break-word" },
-    },
-  },
-  {
-    field: "subject.subjectAreas",
-    headerName: "กลุ่มสาระการเรียนรู้",
-    headerCellProps: { align: "center" },
-    cellProps: {
-      align: "center",
-      style: { maxWidth: 120, wordBreak: "break-word" },
-    },
-  },
-  {
-    field: "subject.hours",
-    headerName: "จำนวน\nชั่วโมง(เต็ม)",
-    headerCellProps: {
-      align: "center",
-      style: { maxWidth: 80, wordBreak: "break-word" },
-    },
-    cellProps: {
-      align: "center",
-    },
-  },
-  {
-    field: "studentEnrollments",
-    headerName: "สถานะ",
-    headerCellProps: { align: "center" },
-    cellProps: { align: "center" },
-    render: (row) => {
-      return <Checkbox checked={row.studentEnrollments.length > 0} disabled />;
-    },
-  },
-  {
-    field: "",
-    headerName: "Options",
-    headerCellProps: { align: "center" },
-    cellProps: { align: "center" },
-    render: (row) => {
-      return (
-        <Box>
-          <Button
-            size="small"
-            variant="outlined"
-            color="error"
-            onClick={() => {
-              onClickDelete(row._id);
-            }}
-          >
-            ลบ
-          </Button>
-        </Box>
-      );
-    },
-  },
-];
+// const columns = (
+//   onClickDelete: (id: string) => void
+// ): TableColumnProps<SubjectOffered>[] => [
+//   {
+//     field: "",
+//     headerName: "ชั้นเรียน",
+//     headerCellProps: { align: "center" },
+//     cellProps: { align: "center" },
+//     render: (row) => {
+//       return `${row.degreeLevel}-${row.grade}/${row.room}`;
+//     },
+//   },
+//   {
+//     field: "subject.code.th",
+//     headerName: "รหัสวิชา",
+//     headerCellProps: { align: "center" },
+//     cellProps: { align: "center" },
+//   },
+//   {
+//     field: "subject.name.th",
+//     headerName: "ชื่อวิชา",
+//     headerCellProps: { align: "center" },
+//     cellProps: {
+//       align: "center",
+//       style: { maxWidth: 160, wordBreak: "break-word" },
+//     },
+//   },
+//   {
+//     field: "subject.credit",
+//     headerName: "หน่วยกิต",
+//     headerCellProps: { align: "center" },
+//     cellProps: { align: "center" },
+//   },
+//   {
+//     field: "subject.subjectType",
+//     headerName: "ประเภทวิชา",
+//     headerCellProps: { align: "center" },
+//     cellProps: {
+//       align: "center",
+//       style: { maxWidth: 120, wordBreak: "break-word" },
+//     },
+//   },
+//   {
+//     field: "subject.subjectAreas",
+//     headerName: "กลุ่มสาระการเรียนรู้",
+//     headerCellProps: { align: "center" },
+//     cellProps: {
+//       align: "center",
+//       style: { maxWidth: 120, wordBreak: "break-word" },
+//     },
+//   },
+//   {
+//     field: "subject.hours",
+//     headerName: "จำนวน\nชั่วโมง(เต็ม)",
+//     headerCellProps: {
+//       align: "center",
+//       style: { maxWidth: 80, wordBreak: "break-word" },
+//     },
+//     cellProps: {
+//       align: "center",
+//     },
+//   },
+//   {
+//     field: "studentEnrollments",
+//     headerName: "สถานะ",
+//     headerCellProps: { align: "center" },
+//     cellProps: { align: "center" },
+//     render: (row) => {
+//       return <Checkbox checked={row.studentEnrollments.length > 0} disabled />;
+//     },
+//   },
+//   {
+//     field: "",
+//     headerName: "Options",
+//     headerCellProps: { align: "center" },
+//     cellProps: { align: "center" },
+//     render: (row) => {
+//       return (
+//         <Box>
+//           <Button
+//             size="small"
+//             variant="outlined"
+//             color="error"
+//             onClick={() => {
+//               onClickDelete(row._id);
+//             }}
+//           >
+//             ลบ
+//           </Button>
+//         </Box>
+//       );
+//     },
+//   },
+// ];
 
 export default function ListPage() {
   const router = useRouter();
   const selectedId = useRef("");
-  const [queryKey, setQueryKey] = useState<
+  const [queryKey] = useState<
     SearchCurriculumSubjectOfferedFormType & {
       subject?: { code: string; name: string; subjectType: string };
     }
   >();
 
-  const { isLoading, data, refetch } = useQuery<
-    unknown,
-    unknown,
-    Holiday[],
-    string[]
-  >({
+  const { refetch } = useQuery<unknown, unknown, Holiday[], string[]>({
     queryKey: [
       "curriculum-subject-offered",
       queryKey?.academicTerm || "",
@@ -173,47 +162,47 @@ export default function ListPage() {
     enabled: false,
   });
 
-  const { data: coreCurriculumOptions } = useQuery<
-    Option,
-    unknown,
-    { label: string; value: string }[]
-  >({
-    queryKey: ["coreCurriculumOptions"],
-    queryFn: () => {
-      return subjectService
-        .getCoreCurriculumOptions()
-        .then((res) => res.data.data);
-    },
-    select: (data) => {
-      const LANG = "th";
-      const output: { label: string; value: string }[] = [];
-      for (const [key, value] of Object.entries(data)) {
-        output.push({ label: value[LANG], value: key });
-      }
-      return output;
-    },
-  });
+  // const { data: coreCurriculumOptions } = useQuery<
+  //   Option,
+  //   unknown,
+  //   { label: string; value: string }[]
+  // >({
+  //   queryKey: ["coreCurriculumOptions"],
+  //   queryFn: () => {
+  //     return subjectService
+  //       .getCoreCurriculumOptions()
+  //       .then((res) => res.data.data);
+  //   },
+  //   select: (data) => {
+  //     const LANG = "th";
+  //     const output: { label: string; value: string }[] = [];
+  //     for (const [key, value] of Object.entries(data)) {
+  //       output.push({ label: value[LANG], value: key });
+  //     }
+  //     return output;
+  //   },
+  // });
 
-  const { data: degreeOptions } = useQuery<
-    Option,
-    unknown,
-    { label: string; value: string }[]
-  >({
-    queryKey: ["degreeOptions"],
-    queryFn: () => {
-      return optionService.getDegreeOptions().then((res) => res.data.data);
-    },
-    select: (data) => {
-      const LANG = "th";
-      const output: { label: string; value: string }[] = [];
-      for (const [key, value] of Object.entries(data)) {
-        output.push({ label: value[LANG], value: key });
-      }
-      return output;
-    },
-  });
+  // const { data: degreeOptions } = useQuery<
+  //   Option,
+  //   unknown,
+  //   { label: string; value: string }[]
+  // >({
+  //   queryKey: ["degreeOptions"],
+  //   queryFn: () => {
+  //     return optionService.getDegreeOptions().then((res) => res.data.data);
+  //   },
+  //   select: (data) => {
+  //     const LANG = "th";
+  //     const output: { label: string; value: string }[] = [];
+  //     for (const [key, value] of Object.entries(data)) {
+  //       output.push({ label: value[LANG], value: key });
+  //     }
+  //     return output;
+  //   },
+  // });
 
-  const { mutate, isPending } = useMutation<unknown, unknown, string>({
+  const { mutate } = useMutation<unknown, unknown, string>({
     mutationFn: async (id) => {
       return (await subjectService.deleteOfferedById(id)).data;
     },
@@ -225,10 +214,10 @@ export default function ListPage() {
 
   const [open, setOpen] = useState(false);
 
-  const onClickDelete = (id: string) => {
-    setOpen(true);
-    selectedId.current = id;
-  };
+  // const onClickDelete = (id: string) => {
+  //   setOpen(true);
+  //   selectedId.current = id;
+  // };
 
   const onConfirmDelete = () => {
     mutate(selectedId.current);
@@ -236,12 +225,12 @@ export default function ListPage() {
 
   const handleCloseConfirmModal = () => setOpen(false);
 
-  const onSearch: SubmitHandler<SearchCurriculumSubjectOfferedFormType> = (
-    dto
-  ) => {
-    setQueryKey(dto);
-    setTimeout(refetch, 300);
-  };
+  // const onSearch: SubmitHandler<SearchCurriculumSubjectOfferedFormType> = (
+  //   dto
+  // ) => {
+  //   setQueryKey(dto);
+  //   setTimeout(refetch, 300);
+  // };
 
   useEffect(() => {
     refetch();
@@ -306,11 +295,11 @@ export default function ListPage() {
           </Typography>
           <Grid container spacing={1}>
             <Grid size={5.75}>
-              <SearchStudentForm
+              {/* <SearchStudentForm
                 onSubmit={() => {}}
                 defaultGrade={""}
                 defaultLevel={""}
-              />
+              /> */}
             </Grid>
           </Grid>
         </Grid>

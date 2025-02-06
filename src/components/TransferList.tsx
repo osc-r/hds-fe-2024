@@ -94,7 +94,7 @@ export default function TransferList(props: {
 
   const customList = (
     title: React.ReactNode,
-    items: { label: string; value: string; data?: any }[],
+    items: { label: string; value: string; data?: Record<string, string> }[],
     btn: React.ReactNode
   ) => (
     <Card>
@@ -142,12 +142,11 @@ export default function TransferList(props: {
         {items.map((value) => {
           const labelId = `transfer-list-all-item-${value}-label`;
 
-          const year = new Date(value.data.attendedDate).toLocaleDateString(
-            "th-TH",
-            {
-              year: "numeric",
-            }
-          );
+          const year = new Date(
+            value?.data?.attendedDate as string
+          ).toLocaleDateString("th-TH", {
+            year: "numeric",
+          });
 
           return (
             <ListItem

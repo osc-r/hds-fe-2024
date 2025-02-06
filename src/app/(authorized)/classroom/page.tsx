@@ -12,10 +12,7 @@ import { useRouter } from "next/navigation";
 import Table, { TableColumnProps } from "@/components/Table";
 import React, { useRef, useState } from "react";
 import ConfirmModal from "@/components/modals/confirm";
-import {
-  Building,
-  Room,
-} from "../../../services/class-scheduler/class-scheduler";
+import { Room } from "../../../services/class-scheduler/class-scheduler";
 import {
   useDeleteRoomById,
   useGetRooms,
@@ -109,8 +106,7 @@ export default function ListPage() {
   const selectedId = useRef("");
 
   const { isLoading, data, refetch } = useGetRooms();
-  const { isLoading: isLoadingRoomOption, data: roomOptions } =
-    useGetRoomTypeOption("th");
+  const { data: roomOptions } = useGetRoomTypeOption("th");
 
   const { mutate, isPending } = useDeleteRoomById(() => {
     handleCloseConfirmModal();

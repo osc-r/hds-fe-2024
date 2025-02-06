@@ -51,6 +51,7 @@ export const useCreateTerm = (onSuccess: () => void) =>
 
 export const useGetTermOptions = (
   lang: string,
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   selectFn?: (data: TermOption) => any
 ) =>
   useQuery({

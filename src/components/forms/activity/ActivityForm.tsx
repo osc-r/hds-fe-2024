@@ -22,7 +22,8 @@ const FORM_COMPONENTS = (
     labelSize: 4,
     inputSize: 7,
     validate: {
-      required: requiredField,
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      required: requiredField as any,
     },
   },
   {
@@ -34,7 +35,8 @@ const FORM_COMPONENTS = (
     labelSize: 4,
     inputSize: 7,
     validate: {
-      required: requiredField,
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      required: requiredField as any,
     },
   },
   {
