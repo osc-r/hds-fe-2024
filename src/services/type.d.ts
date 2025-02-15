@@ -15,9 +15,9 @@ export type Locale = Record<[lang: string], string>;
 
 export type Pagination = {
   sort?: string;
-  page?: number;
-  limit?: number;
-  offset?: number;
+  page?: string;
+  limit?: string;
+  offset?: string;
 };
 
 export type ListResponse<T> = { result: T[]; totalRecord: number };

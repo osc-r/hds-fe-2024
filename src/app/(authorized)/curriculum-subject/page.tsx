@@ -143,9 +143,9 @@ export default function ListPage() {
   const router = useRouter();
   const selectedId = useRef("");
   const [queryKey, setQueryKey] = useState<SearchCurriculumSubjectFormType>({
-    page: 1,
-    offset: 0,
-    limit: 10,
+    page: "1",
+    offset: "0",
+    limit: "10",
   });
 
   const { isLoading, data, refetch } = useGetSubjects(
@@ -154,10 +154,10 @@ export default function ListPage() {
     queryKey?.name || "",
     queryKey?.subjectType || "",
     queryKey?.subjectAreas || "",
-    queryKey?.degreeLevel || ""
-    // queryKey?.page?.toString() || "",
-    // queryKey?.limit?.toString() || "",
-    // queryKey?.offset?.toString() || "",
+    queryKey?.degreeLevel || "",
+    queryKey?.page,
+    queryKey?.limit,
+    queryKey?.offset
   );
 
   const { data: subjectAreaOptions } = useGetSubjectAreaOptions("th");

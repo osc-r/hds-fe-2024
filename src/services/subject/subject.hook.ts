@@ -13,7 +13,10 @@ export const useGetSubjects = (
   name?: string,
   subjectType?: string,
   subjectAreas?: string,
-  degreeLevel?: string
+  degreeLevel?: string,
+  page?: string,
+  limit?: string,
+  offset?: string
 ) =>
   useQuery<unknown, unknown, Subject[], string[]>({
     queryKey: [
@@ -25,9 +28,9 @@ export const useGetSubjects = (
       subjectType || "",
       subjectAreas || "",
       degreeLevel || "",
-      //   queryKey?.page?.toString() || "",
-      //   queryKey?.limit?.toString() || "",
-      //   queryKey?.offset?.toString() || "",
+      page || "",
+      limit || "",
+      offset || "",
     ],
     queryFn: ({ queryKey }) => {
       const [
@@ -39,9 +42,9 @@ export const useGetSubjects = (
         subjectType,
         subjectAreas,
         degreeLevel,
-        // page,
-        // limit,
-        // offset,
+        page,
+        limit,
+        offset,
       ] = queryKey;
 
       return subjectService
@@ -52,9 +55,9 @@ export const useGetSubjects = (
           subjectType: subjectType || undefined,
           subjectAreas: subjectAreas || undefined,
           degreeLevel: degreeLevel || undefined,
-          //   page: 1,
-          //   limit: 10,
-          //   offset: 0,
+          page: page || undefined,
+          limit: limit || undefined,
+          offset: offset || undefined,
         })
         .then((res) => res.data.data.result);
     },
