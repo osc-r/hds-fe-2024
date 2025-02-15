@@ -4,6 +4,7 @@ import FormRenderer, { FormComponent } from "../FormRenderer";
 import { FormProps, Menu } from "../form";
 import { FormProvider, useForm } from "react-hook-form";
 import { SearchEnrollmentByGroupDto } from "../../../services/subject/subject";
+import { requiredField } from "../validation";
 
 export type SearchEnrollmentGroupFormType = SearchEnrollmentByGroupDto;
 
@@ -20,6 +21,9 @@ const FORM_COMPONENTS = (
     labelSize: 0,
     inputSize: 12,
     menu: menu1,
+    validate: {
+      required: requiredField,
+    },
   },
   {
     name: "grade",

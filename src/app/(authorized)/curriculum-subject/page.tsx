@@ -11,16 +11,21 @@ import {
 import { useRouter } from "next/navigation";
 import Table, { TableColumnProps } from "@/components/Table";
 import React, { useEffect, useRef, useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
 import ConfirmModal from "@/components/modals/confirm";
 import { SubmitHandler } from "react-hook-form";
-import subjectService from "../../../services/subject/subject.service";
 import SearchCurriculumSubjectForm, {
   SearchCurriculumSubjectFormType,
 } from "@/components/forms/curriculum-subject/SearchCurriculumSubjectForm";
-import optionService from "../../../services/option/option.service";
 import { Option } from "../../../services/option/option";
 import { Subject } from "../../../services/subject/subject";
+import { useGetDegreeOptions } from "../../../services/option/option.hook";
+import {
+  useDeleteSubjectById,
+  useGetCorCurriculumOptions,
+  useGetSubjectAreaOptions,
+  useGetSubjects,
+  useGetSubjectTypeOptions,
+} from "../../../services/subject/subject.hook";
 
 const columns = (
   lang: string,
@@ -137,133 +142,35 @@ const columns = (
 export default function ListPage() {
   const router = useRouter();
   const selectedId = useRef("");
-  const [queryKey, setQueryKey] = useState<SearchCurriculumSubjectFormType>();
-
-  const { isLoading, data, refetch } = useQuery<
-    unknown,
-    unknown,
-    Subject[],
-    string[]
-  >({
-    queryKey: [
-      "curriculum-subject",
-      queryKey?.curriculum || "",
-      queryKey?.code || "",
-      queryKey?.name || "",
-      queryKey?.subjectType || "",
-      queryKey?.subjectAreas || "",
-      queryKey?.degreeLevel || "",
-    ],
-    queryFn: ({ queryKey }) => {
-      const [, curriculum, code, name, subjectType, subjectAreas, degreeLevel] =
-        queryKey;
-      return subjectService
-        .getSubjects({
-          curriculum: curriculum || undefined,
-          code: code || undefined,
-          name: name || undefined,
-          subjectType: subjectType || undefined,
-          subjectAreas: subjectAreas || undefined,
-          degreeLevel: degreeLevel || undefined,
-        })
-        .then((res) => res.data.data.result);
-    },
-    enabled: false,
+  const [queryKey, setQueryKey] = useState<SearchCurriculumSubjectFormType>({
+    page: 1,
+    offset: 0,
+    limit: 10,
   });
 
-  const { data: subjectAreaOptions } = useQuery<
-    Option,
-    unknown,
-    { label: string; value: string }[]
-  >({
-    queryKey: ["subjectAreaOptions"],
-    queryFn: () => {
-      return subjectService
-        .getSubjectAreaOptions()
-        .then((res) => res.data.data);
-    },
-    select: (data) => {
-      const LANG = "th";
-      const output: { label: string; value: string }[] = [];
-      for (const [key, value] of Object.entries(data)) {
-        output.push({ label: value[LANG], value: key });
-      }
-      return output;
-    },
-    initialData: {},
-  });
+  const { isLoading, data, refetch } = useGetSubjects(
+    queryKey?.curriculum || "",
+    queryKey?.code || "",
+    queryKey?.name || "",
+    queryKey?.subjectType || "",
+    queryKey?.subjectAreas || "",
+    queryKey?.degreeLevel || ""
+    // queryKey?.page?.toString() || "",
+    // queryKey?.limit?.toString() || "",
+    // queryKey?.offset?.toString() || "",
+  );
 
-  const { data: subjectTypeOptions } = useQuery<
-    Option,
-    unknown,
-    { label: string; value: string }[]
-  >({
-    queryKey: ["subjectTypeOptions"],
-    queryFn: () => {
-      return subjectService
-        .getSubjectTypeOptions()
-        .then((res) => res.data.data);
-    },
-    select: (data) => {
-      const LANG = "th";
-      const output: { label: string; value: string }[] = [];
-      for (const [key, value] of Object.entries(data)) {
-        output.push({ label: value[LANG], value: key });
-      }
-      return output;
-    },
-    initialData: {},
-  });
+  const { data: subjectAreaOptions } = useGetSubjectAreaOptions("th");
 
-  const { data: coreCurriculumOptions } = useQuery<
-    Option,
-    unknown,
-    { label: string; value: string }[]
-  >({
-    queryKey: ["coreCurriculumOptions"],
-    queryFn: () => {
-      return subjectService
-        .getCoreCurriculumOptions()
-        .then((res) => res.data.data);
-    },
-    select: (data) => {
-      const LANG = "th";
-      const output: { label: string; value: string }[] = [];
-      for (const [key, value] of Object.entries(data)) {
-        output.push({ label: value[LANG], value: key });
-      }
-      return output;
-    },
-  });
+  const { data: subjectTypeOptions } = useGetSubjectTypeOptions("th");
 
-  const { data: degreeOptions } = useQuery<
-    Option,
-    unknown,
-    { label: string; value: string }[]
-  >({
-    queryKey: ["degreeOptions"],
-    queryFn: () => {
-      return optionService.getDegreeOptions().then((res) => res.data.data);
-    },
-    select: (data) => {
-      const LANG = "th";
-      const output: { label: string; value: string }[] = [];
-      for (const [key, value] of Object.entries(data)) {
-        output.push({ label: value[LANG], value: key });
-      }
-      return output;
-    },
-    initialData: {},
-  });
+  const { data: coreCurriculumOptions } = useGetCorCurriculumOptions("th");
 
-  const { mutate, isPending } = useMutation<unknown, unknown, string>({
-    mutationFn: async (id) => {
-      return (await subjectService.deleteSubjectById(id)).data;
-    },
-    onSuccess: () => {
-      handleCloseConfirmModal();
-      refetch();
-    },
+  const { data: degreeOptions } = useGetDegreeOptions("th");
+
+  const { mutate, isPending } = useDeleteSubjectById(() => {
+    handleCloseConfirmModal();
+    refetch();
   });
 
   const [open, setOpen] = useState(false);

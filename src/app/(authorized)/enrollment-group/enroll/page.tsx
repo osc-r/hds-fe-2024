@@ -1,7 +1,7 @@
 "use client";
 
 import FormLayout from "../../../../layouts/FormLayout";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Box,
@@ -19,8 +19,6 @@ import {
   SubjectOffered,
 } from "../../../../services/subject/subject";
 import { Student } from "../../../../services/calendar/calendar";
-import hdsv2GroupsService from "../../../../services/hdsv2-groups/hdsv2-groups.service";
-import { GroupOption } from "../../../../services/hdsv2-groups/hdsv2-groups";
 import Table, { TableColumnProps } from "@/components/Table";
 import React, { useEffect, useState } from "react";
 import {
@@ -28,6 +26,7 @@ import {
   useGetTermOptions,
 } from "../../../../services/calendar/calendar.hook";
 import { Suspense } from "react";
+import { useGetGroupOption } from "../../../../services/hdsv2-groups/hdsv2-groups.hook";
 
 const columns: TableColumnProps<Student>[] = [
   {
@@ -116,26 +115,9 @@ function CreatePageComp() {
     return label;
   });
 
-  const { data: currentClass } = useQuery<GroupOption[], unknown, string>({
-    queryKey: ["classOptions"],
-    queryFn: () => {
-      return hdsv2GroupsService
-        .getGroupsOption("full")
-        .then((res) => res.data.data.result);
-    },
-    select: (data) => {
-      const LANG = "th";
-
-      let label = "-";
-      data.forEach((item) => {
-        if (item.queryString === generateQuery) {
-          label = item[LANG];
-        }
-      });
-      return label;
-    },
-    initialData: [],
-  });
+  const { data } = useGetGroupOption("th");
+  const currentClass =
+    data.find((i) => i.value === generateQuery)?.label || "-";
 
   const { data: students } = useGetStudentGroupByTermId(
     academicTerm || "",

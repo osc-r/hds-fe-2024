@@ -46,7 +46,8 @@ class CalendarService {
   }
   getTerms() {
     return Client.instance.get<BaseResponse<ListResponse<Term>>>(
-      `/v1/calendar/term`
+      `/v1/calendar/term`,
+      { params: { page: 1, limit: 5 } }
     );
   }
   getTermOptions() {

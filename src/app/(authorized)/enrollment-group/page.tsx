@@ -12,18 +12,16 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import Table, { TableColumnProps } from "@/components/Table";
 import React, { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { SubmitHandler } from "react-hook-form";
 import SearchEnrollmentGroupForm from "@/components/forms/enrollment-group/SearchEnrollmentGroupForm";
-import { GroupOption } from "../../../services/hdsv2-groups/hdsv2-groups";
-import hdsv2GroupsService from "../../../services/hdsv2-groups/hdsv2-groups.service";
-import subjectService from "../../../services/subject/subject.service";
 import {
   EnrollmentByGroup,
   SearchEnrollmentByGroupDto,
 } from "../../../services/subject/subject";
 import { useGetTermOptions } from "../../../services/calendar/calendar.hook";
 import { Suspense } from "react";
+import { useGetGroupOption } from "../../../services/hdsv2-groups/hdsv2-groups.hook";
+import { useGetEnrollmentByGroup } from "../../../services/subject/subject.hook";
 
 const columns = (
   onClickEdit: (degreeLevel?: string, grade?: string, room?: string) => void
@@ -95,74 +93,14 @@ function ListPageComp() {
 
   const { data: termOptions } = useGetTermOptions("th");
 
-  const { data: classOptions } = useQuery<
-    GroupOption[],
-    unknown,
-    {
-      label: string;
-      value: string;
-      data: {
-        degreeLevel: string;
-        grade: string;
-        room: string;
-      };
-    }[]
-  >({
-    queryKey: ["classOptions"],
-    queryFn: () => {
-      return hdsv2GroupsService
-        .getGroupsOption("full")
-        .then((res) => res.data.data.result);
-    },
-    select: (data) => {
-      const LANG = "th";
-      const output: {
-        label: string;
-        value: string;
-        data: {
-          degreeLevel: string;
-          grade: string;
-          room: string;
-        };
-      }[] = [];
-      data.forEach((item) => {
-        output.push({
-          label: item[LANG],
-          value: item.queryString,
-          data: item.query,
-        });
-      });
-      return output;
-    },
-    initialData: [],
-  });
+  const { data: classOptions } = useGetGroupOption("th");
 
-  const { isLoading, data, refetch } = useQuery<
-    unknown,
-    unknown,
-    EnrollmentByGroup[],
-    string[]
-  >({
-    queryKey: [
-      "enrollment-by-group",
-      queryKey?.academicTerm || "",
-      queryKey?.degreeLevel || "",
-      queryKey?.grade || "",
-      queryKey?.room || "",
-    ],
-    queryFn: ({ queryKey }) => {
-      const [, academicTerm, degreeLevel, grade, room] = queryKey;
-      return subjectService
-        .getEnrollmentByGroup({
-          academicTerm,
-          degreeLevel: degreeLevel || undefined,
-          grade: grade || undefined,
-          room: room || undefined,
-        })
-        .then((res) => res.data.data);
-    },
-    enabled: false,
-  });
+  const { isLoading, data, refetch } = useGetEnrollmentByGroup(
+    queryKey?.academicTerm || "",
+    queryKey?.degreeLevel || "",
+    queryKey?.grade || "",
+    queryKey?.room || ""
+  );
 
   const onClickEdit = (degreeLevel?: string, grade?: string, room?: string) => {
     const query = {

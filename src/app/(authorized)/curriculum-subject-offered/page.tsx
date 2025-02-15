@@ -12,20 +12,21 @@ import {
 import { useRouter } from "next/navigation";
 import Table, { TableColumnProps } from "@/components/Table";
 import React, { useEffect, useRef, useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { Holiday } from "../../../services/calendar/calendar";
 import ConfirmModal from "@/components/modals/confirm";
 import { SubmitHandler } from "react-hook-form";
-import subjectService from "../../../services/subject/subject.service";
-import optionService from "../../../services/option/option.service";
-import { Option } from "../../../services/option/option";
 import SearchCurriculumSubjectOfferedForm, {
   SearchCurriculumSubjectOfferedFormType,
 } from "@/components/forms/curriculum-subject-offered/SearchCurriculumSubjectOfferedForm";
 import { SubjectOffered } from "../../../services/subject/subject";
 import { useGetTermOptions } from "../../../services/calendar/calendar.hook";
-import { GroupOption } from "../../../services/hdsv2-groups/hdsv2-groups";
-import hdsv2GroupsService from "../../../services/hdsv2-groups/hdsv2-groups.service";
+import { useGetGroupOption } from "../../../services/hdsv2-groups/hdsv2-groups.hook";
+import { useGetDegreeOptions } from "../../../services/option/option.hook";
+import {
+  useDeleteOfferedById,
+  useGetOffered,
+  useGetSubjectAreaOptions,
+  useGetSubjectTypeOptions,
+} from "../../../services/subject/subject.hook";
 
 const columns = (
   subjectAreaOptions: {
@@ -156,165 +157,29 @@ export default function ListPage() {
     }
   >();
 
-  const { isLoading, data, refetch } = useQuery<
-    unknown,
-    unknown,
-    Holiday[],
-    string[]
-  >({
-    queryKey: [
-      "curriculum-subject-offered",
-      queryKey?.academicTerm || "",
-      queryKey?.degreeLevel || "",
-      queryKey?.grade || "",
-      queryKey?.room || "",
-      queryKey?.subject?.code || "",
-      queryKey?.subject?.name || "",
-      queryKey?.subject?.subjectType || "",
-    ],
-    queryFn: ({ queryKey }) => {
-      const [
-        ,
-        academicTerm,
-        degreeLevel,
-        grade,
-        room,
-        code,
-        name,
-        subjectType,
-      ] = queryKey;
-      return subjectService
-        .getSubjectOffered({
-          academicTerm: academicTerm || undefined,
-          degreeLevel: degreeLevel || undefined,
-          grade: grade || undefined,
-          room: room || undefined,
-          ["subject.code"]: code || undefined,
-          ["subject.name"]: name || undefined,
-          ["subject.subjectType"]: subjectType || undefined,
-          // limit: 10,
-        })
-        .then((res) => res.data.data.result);
-    },
-    enabled: false,
-  });
+  const { isLoading, data, refetch } = useGetOffered(
+    queryKey?.subject?.code || "",
+    queryKey?.subject?.name || "",
+    queryKey?.subject?.subjectType || "",
+    queryKey?.academicTerm || "",
+    queryKey?.degreeLevel || "",
+    queryKey?.grade || "",
+    queryKey?.room || ""
+  );
 
-  const { data: subjectAreaOptions } = useQuery<
-    Option,
-    unknown,
-    { label: string; value: string }[]
-  >({
-    queryKey: ["subjectAreaOptions"],
-    queryFn: () => {
-      return subjectService
-        .getSubjectAreaOptions()
-        .then((res) => res.data.data);
-    },
-    select: (data) => {
-      const LANG = "th";
-      const output: { label: string; value: string }[] = [];
-      for (const [key, value] of Object.entries(data)) {
-        output.push({ label: value[LANG], value: key });
-      }
-      return output;
-    },
-    initialData: {},
-  });
+  const { data: subjectAreaOptions } = useGetSubjectAreaOptions("th");
 
-  const { data: subjectTypeOptions } = useQuery<
-    Option,
-    unknown,
-    { label: string; value: string }[]
-  >({
-    queryKey: ["subjectTypeOptions"],
-    queryFn: () => {
-      return subjectService
-        .getSubjectTypeOptions()
-        .then((res) => res.data.data);
-    },
-    select: (data) => {
-      const LANG = "th";
-      const output: { label: string; value: string }[] = [];
-      for (const [key, value] of Object.entries(data)) {
-        output.push({ label: value[LANG], value: key });
-      }
-      return output;
-    },
-    initialData: {},
-  });
+  const { data: subjectTypeOptions } = useGetSubjectTypeOptions("th");
 
-  const { data: degreeOptions } = useQuery<
-    Option,
-    unknown,
-    { label: string; value: string }[]
-  >({
-    queryKey: ["degreeOptions"],
-    queryFn: () => {
-      return optionService.getDegreeOptions().then((res) => res.data.data);
-    },
-    select: (data) => {
-      const LANG = "th";
-      const output: { label: string; value: string }[] = [];
-      for (const [key, value] of Object.entries(data)) {
-        output.push({ label: value[LANG], value: key });
-      }
-      return output;
-    },
-    initialData: {},
-  });
+  const { data: degreeOptions } = useGetDegreeOptions("th");
 
   const { data: termOptions } = useGetTermOptions("th");
 
-  const { data: classOptions } = useQuery<
-    GroupOption[],
-    unknown,
-    {
-      label: string;
-      value: string;
-      data: {
-        degreeLevel: string;
-        grade: string;
-        room: string;
-      };
-    }[]
-  >({
-    queryKey: ["classOptions"],
-    queryFn: () => {
-      return hdsv2GroupsService
-        .getGroupsOption("full")
-        .then((res) => res.data.data.result);
-    },
-    select: (data) => {
-      const LANG = "th";
-      const output: {
-        label: string;
-        value: string;
-        data: {
-          degreeLevel: string;
-          grade: string;
-          room: string;
-        };
-      }[] = [];
-      data.forEach((item) => {
-        output.push({
-          label: item[LANG],
-          value: item.queryString,
-          data: item.query,
-        });
-      });
-      return output;
-    },
-    initialData: [],
-  });
+  const { data: classOptions } = useGetGroupOption("th");
 
-  const { mutate, isPending } = useMutation<unknown, unknown, string>({
-    mutationFn: async (id) => {
-      return (await subjectService.deleteOfferedById(id)).data;
-    },
-    onSuccess: () => {
-      handleCloseConfirmModal();
-      refetch();
-    },
+  const { mutate, isPending } = useDeleteOfferedById(() => {
+    handleCloseConfirmModal();
+    refetch();
   });
 
   const [open, setOpen] = useState(false);

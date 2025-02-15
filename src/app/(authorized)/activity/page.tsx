@@ -11,15 +11,17 @@ import {
 import { useRouter } from "next/navigation";
 import Table, { TableColumnProps } from "@/components/Table";
 import React, { useEffect, useRef, useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
 import ConfirmModal from "@/components/modals/confirm";
 import { Building } from "../../../services/class-scheduler/class-scheduler";
-import nonAcademicActivityService from "../../../services/non-academic-activity/non-academic-activity.service";
 import SearchActivityForm, {
   SearchActivityFormType,
 } from "@/components/forms/activity/SearchActivityForm";
 import { SubmitHandler } from "react-hook-form";
 import { useGetTermOptions } from "../../../services/calendar/calendar.hook";
+import {
+  useDeleteNonAcademicActivityById,
+  useGetNonAcademicActivities,
+} from "../../../services/non-academic-activity/non-academic-activity.hook";
 
 const columns = (
   onClickEdit: (id: string) => void,
@@ -77,33 +79,13 @@ export default function ListPage() {
   const [open, setOpen] = useState(false);
   const [queryKey, setQueryKey] = useState<SearchActivityFormType>();
 
-  const { isLoading, data, refetch } = useQuery<
-    unknown,
-    unknown,
-    Building[],
-    string[]
-  >({
-    queryKey: ["activity", queryKey?.academicTerm || ""],
-    queryFn: ({ queryKey }) => {
-      const [, academicTerm] = queryKey;
-      return nonAcademicActivityService
-        .getNonAcademicActivities({ academicTerm: academicTerm || undefined })
-        .then((res) => res.data.data.result);
-    },
-    initialData: [],
-    enabled: false,
-  });
+  const { isLoading, data, refetch } = useGetNonAcademicActivities(
+    queryKey?.academicTerm || ""
+  );
 
-  const { mutate, isPending } = useMutation<unknown, unknown, string>({
-    mutationFn: async (id) => {
-      return (
-        await nonAcademicActivityService.deleteNonAcademicActivityById(id)
-      ).data;
-    },
-    onSuccess: () => {
-      handleCloseConfirmModal();
-      refetch();
-    },
+  const { mutate, isPending } = useDeleteNonAcademicActivityById(() => {
+    handleCloseConfirmModal();
+    refetch();
   });
 
   const { data: termOptions } = useGetTermOptions("th");
