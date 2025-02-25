@@ -1,12 +1,15 @@
 import Client from "../client";
 import { BaseResponse } from "../type";
+import { Student } from "./hdsv2-students";
 
 class Hdsv2StudentsService {
   getStudents() {
     return Client.instance.get<BaseResponse>(`/v1/hdsv2-students`);
   }
   getStudentById(id: string) {
-    return Client.instance.get<BaseResponse>(`/v1/hdsv2-students/${id}/detail`);
+    return Client.instance.get<BaseResponse<Student>>(
+      `/v1/hdsv2-students/${id}/detail`
+    );
   }
   inquiryStudents() {
     return Client.instance.post<BaseResponse>(`/v1/hdsv2-students/inquiry`);

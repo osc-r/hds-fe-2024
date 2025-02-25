@@ -11,7 +11,7 @@ export type RecordMetadata = {
   __v: number;
 };
 
-export type Locale = Record<[lang: string], string>;
+export type Locale = { [lang: string]: string };
 
 export type Pagination = {
   sort?: string;

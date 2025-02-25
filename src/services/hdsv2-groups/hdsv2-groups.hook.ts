@@ -1,23 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { GroupOption } from "./hdsv2-groups";
 import hdsv2GroupsService from "./hdsv2-groups.service";
+import { Menu } from "@/components/forms/form";
 
 const KEY = "HDSV2_GROUP_SERVICE";
 
 export const useGetGroupOption = (lang: "th" | "en", degreeLevel?: string) =>
-  useQuery<
-    GroupOption[],
-    unknown,
-    {
-      label: string;
-      value: string;
-      data: {
-        degreeLevel: string;
-        grade: string;
-        room: string;
-      };
-    }[]
-  >({
+  useQuery<GroupOption[], unknown, Menu>({
     queryKey: [KEY, "getGroupsOption", degreeLevel],
     queryFn: (ctx) => {
       return hdsv2GroupsService
@@ -25,15 +14,7 @@ export const useGetGroupOption = (lang: "th" | "en", degreeLevel?: string) =>
         .then((res) => res.data.data.result);
     },
     select: (data) => {
-      const output: {
-        label: string;
-        value: string;
-        data: {
-          degreeLevel: string;
-          grade: string;
-          room: string;
-        };
-      }[] = [];
+      const output: Menu = [];
       data.forEach((item) => {
         output.push({
           label: item[lang],

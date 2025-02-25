@@ -75,7 +75,9 @@ const Select = (props: SelectProps) => {
 
   return (
     <FormControl fullWidth>
-      <InputLabel size="small">{placeholder}</InputLabel>
+      <InputLabel size="small" error={!!errorMessage}>
+        {placeholder}
+      </InputLabel>
       <SelectMui
         variant="outlined"
         size="small"

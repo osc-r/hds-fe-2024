@@ -91,3 +91,27 @@ export type GroupEnrollDto = {
   studentIds: string[];
   offeredSubjectIds: string[];
 };
+
+export type EnrollmentByStudent = {
+  academicTerm: string;
+  degreeLevel: string;
+  grade: number;
+  room: number;
+  subject: Omit<
+    Subject,
+    [
+      "curriculum",
+      "displayNameTranscript",
+      "degreeLevel",
+      "hours",
+      "hoursPerWeek",
+    ]
+  >;
+  periods: [];
+} & RecordMetadata;
+
+export type IndividualEnrollDto = {
+  offeredSubjectIds: string[];
+  studentId: string;
+  replace: boolean;
+};

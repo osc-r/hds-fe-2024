@@ -18,6 +18,7 @@ import {
   FieldValues,
   Path,
   PathValue,
+  SubmitErrorHandler,
   SubmitHandler,
   useFormContext,
   UseFormRegister,
@@ -181,6 +182,7 @@ type FormRendererProps<T extends FieldValues> = {
   initialData?: T;
   isLoading?: boolean;
   hideDefaultAction?: boolean;
+  onInvalid?: SubmitErrorHandler<T>;
 } & PropsWithChildren;
 
 const FormRenderer = <T extends FieldValues>(props: FormRendererProps<T>) => {
@@ -253,7 +255,7 @@ const FormRenderer = <T extends FieldValues>(props: FormRendererProps<T>) => {
               variant="contained"
               color="success"
               sx={{ ml: 2 }}
-              onClick={handleSubmit(onSave)}
+              onClick={handleSubmit(onSave, props.onInvalid)}
               disabled={props.isLoading}
             >
               {props.isLoading ? (

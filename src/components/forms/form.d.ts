@@ -9,4 +9,5 @@ export type FormProps<T> = {
 export type Menu = {
   label: string;
   value: string;
+  [key: string]: Record<string, string> | string;
 }[];

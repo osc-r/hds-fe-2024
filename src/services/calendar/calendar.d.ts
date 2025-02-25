@@ -76,4 +76,5 @@ export type SearchStudentGroupByTermIdDto = {
   degreeLevel: string;
   grade: string;
   room: string;
+  search?: string;
 };

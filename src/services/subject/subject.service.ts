@@ -6,6 +6,7 @@ import {
   CreateSubjectOfferedDto,
   EnrollmentByGroup,
   GroupEnrollDto,
+  IndividualEnrollDto,
   SearchEnrollmentByGroupDto,
   SearchSubjectDto,
   SearchSubjectOfferedDto,
@@ -49,8 +50,11 @@ class SubjectService {
   groupWithdraw() {
     return Client.instance.post<BaseResponse>(`/v1/subject/withdraw/group`);
   }
-  individualEnroll() {
-    return Client.instance.post<BaseResponse>(`/v1/subject/enroll/individual`);
+  individualEnroll(dto: IndividualEnrollDto) {
+    return Client.instance.post<BaseResponse>(
+      `/v1/subject/enroll/individual`,
+      dto
+    );
   }
   getEnrollmentByGroup(dto: SearchEnrollmentByGroupDto) {
     return Client.instance.get<BaseResponse<EnrollmentByGroup[]>>(
@@ -58,9 +62,10 @@ class SubjectService {
       { params: dto }
     );
   }
-  getEnrollmentByStudentId(studentId: string) {
+  getEnrollmentByStudentId(studentId: string, academicTermId: string) {
     return Client.instance.get<BaseResponse>(
-      `/v1/subject/offered/enrollment-by-student/${studentId}`
+      `/v1/subject/offered/enrollment-by-student/${studentId}`,
+      { params: { academicTermId } }
     );
   }
   getOfferedById(id: string) {

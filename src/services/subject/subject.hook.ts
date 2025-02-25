@@ -1,5 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { EnrollmentByGroup, Subject, SubjectOffered } from "./subject";
+import {
+  EnrollmentByGroup,
+  EnrollmentByStudent,
+  IndividualEnrollDto,
+  Subject,
+  SubjectOffered,
+} from "./subject";
 import subjectService from "./subject.service";
 import { Option } from "../option/option";
 import { CurriculumSubjectFormType } from "@/components/forms/curriculum-subject/CurriculumSubjectForm";
@@ -207,6 +213,7 @@ export const useGetOffered = (
         .then((res) => res.data.data.result);
     },
     enabled: false,
+    initialData: [],
   });
 
 export const useCreateSubjectOffered = (onSuccess: () => void) =>
@@ -244,4 +251,30 @@ export const useGetEnrollmentByGroup = (
         .then((res) => res.data.data);
     },
     enabled: false,
+    initialData: [],
+  });
+
+export const useGetEnrollmentByStudentId = (
+  studentId: string,
+  academicTermId: string
+) =>
+  useQuery<unknown, unknown, EnrollmentByStudent[], string[]>({
+    queryKey: [KEY, "getEnrollmentByStudentId", studentId, academicTermId],
+    queryFn: ({ queryKey }) => {
+      const [, , studentId, academicTermId] = queryKey;
+
+      return subjectService
+        .getEnrollmentByStudentId(studentId, academicTermId)
+        .then((res) => res.data.data);
+    },
+    enabled: false,
+    initialData: [],
+  });
+
+export const useEnrollIndividual = (onSuccess: () => void) =>
+  useMutation<unknown, unknown, IndividualEnrollDto>({
+    mutationFn: async (body) => {
+      return (await subjectService.individualEnroll(body)).data;
+    },
+    onSuccess,
   });

@@ -91,11 +91,11 @@ const NAVIGATION: Navigation = [
     icon: <AppRegistrationIcon />,
     segment: "enrollment-group",
   },
-  // {
-  //   title: "ลงทะเบียน/เพิ่ม/ถอน รายบุคคล",
-  //   icon: <AppRegistrationIcon />,
-  //   segment: "study-period",
-  // },
+  {
+    title: "ลงทะเบียน/เพิ่ม/ถอน รายบุคคล",
+    icon: <AppRegistrationIcon />,
+    segment: "enrollment-individual",
+  },
 ];
 
 export default function RootLayout(
