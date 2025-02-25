@@ -7,6 +7,7 @@ import {
   SearchHolidayDto,
   SearchStudentGroupByTermIdDto,
   StudentGroup,
+  StudentGroupOption,
   Term,
   TermOption,
 } from "./calendar";
@@ -67,7 +68,10 @@ class CalendarService {
     );
   }
   //
-  getStudentGroupByTermId(termId: string, dto?: SearchStudentGroupByTermIdDto) {
+  getStudentGroupByTermId(
+    termId: string,
+    dto?: Partial<SearchStudentGroupByTermIdDto>
+  ) {
     return Client.instance.get<BaseResponse<ListResponse<StudentGroup>>>(
       `/v1/calendar/term/${termId}/student-group`,
       { params: dto }
@@ -79,7 +83,7 @@ class CalendarService {
     );
   }
   getStudentGroupOptionByTermId(termId: string) {
-    return Client.instance.get<BaseResponse>(
+    return Client.instance.get<BaseResponse<StudentGroupOption>>(
       `/v1/calendar/term/${termId}/student-group/option`
     );
   }

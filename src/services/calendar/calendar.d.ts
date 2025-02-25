@@ -1,3 +1,4 @@
+import { Option } from "../option/option";
 import { RecordMetadata } from "../type";
 
 export type CreateAcademicCalendarDto = {
@@ -77,4 +78,15 @@ export type SearchStudentGroupByTermIdDto = {
   grade: string;
   room: string;
   search?: string;
+};
+
+export type StudentGroupOption = {
+  [key: string]: Record<string, string> & {
+    group: {
+      _id: string;
+      degreeLevel: string;
+      grade: number;
+      room: number;
+    };
+  };
 };

@@ -6,21 +6,21 @@ import { Button, createTheme } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import CalendarViewWeekIcon from "@mui/icons-material/CalendarViewWeek";
-// import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import PersonIcon from "@mui/icons-material/Person";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import { usePathname, useRouter } from "next/navigation";
 
 const NAVIGATION: Navigation = [
-  // {
-  //   kind: "header",
-  //   title: "นักเรียน",
-  // },
-  // {
-  //   title: "เพิ่มนักเรียนในภาคเรียน",
-  //   icon: <PersonAddIcon />,
-  //   segment: "add-student",
-  // },
-  // { kind: "divider" },
+  {
+    kind: "header",
+    title: "นักเรียน",
+  },
+  {
+    title: "รายชื่อนักเรียน",
+    icon: <PersonIcon />,
+    segment: "student",
+  },
+  { kind: "divider" },
   {
     kind: "header",
     title: "จัดการข้อมูลโรงเรียน",

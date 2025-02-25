@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import calendarService from "./calendar.service";
 import { AcademicCalendarFormType } from "@/components/forms/academic-calendar/AcademicCalendarForm";
-import { StudentGroup, TermOption } from "./calendar";
+import { StudentGroup, StudentGroupOption, TermOption } from "./calendar";
 import { HolidayFormType } from "@/components/forms/holiday/HolidayForm";
 
 const KEY = "CALENDAR_SERVICE";
@@ -142,19 +142,77 @@ export const useGetStudentGroupByTermId = (
     queryFn: ({ queryKey }) => {
       const [, , academicTerm, degreeLevel, grade, room] = queryKey;
       return calendarService
-        .getStudentGroupByTermId(academicTerm, { degreeLevel, grade, room })
+        .getStudentGroupByTermId(academicTerm, {
+          degreeLevel: degreeLevel ? degreeLevel : undefined,
+          grade: grade ? grade : undefined,
+          room: room ? room : undefined,
+        })
         .then((res) => res.data.data.result);
     },
     select: (data) =>
-      data.reduce(
-        (a, b) => {
-          return {
-            students: [...a.students, ...b.students],
-          } as StudentGroup;
-        },
-        {
-          students: [],
-        } as unknown as StudentGroup
-      ).students,
+      data
+        .map((i) => ({
+          ...i,
+          students: i.students.map((j) => ({ ...j, class: i.en })),
+        }))
+        .reduce(
+          (a, b) => {
+            return {
+              students: [...a.students, ...b.students],
+            } as StudentGroup;
+          },
+          {
+            students: [],
+          } as unknown as StudentGroup
+        ).students,
     initialData: [],
+  });
+
+export const useGetStudentGroupOptions = (
+  academicTermId: string,
+  lang: string
+) =>
+  useQuery<
+    StudentGroupOption,
+    unknown,
+    {
+      label: string;
+      value: string;
+      data: {
+        _id: string;
+        degreeLevel: string;
+        grade: number;
+        room: number;
+      };
+    }[]
+  >({
+    queryKey: [KEY, "getStudentGroupOptionByTermId", academicTermId],
+    queryFn: () => {
+      return calendarService
+        .getStudentGroupOptionByTermId(academicTermId)
+        .then((res) => res.data.data);
+    },
+    select: (data) => {
+      const output: {
+        label: string;
+        value: string;
+        data: {
+          _id: string;
+          degreeLevel: string;
+          grade: number;
+          room: number;
+        };
+      }[] = [];
+
+      for (const [_, value] of Object.entries(data)) {
+        output.push({
+          label: value[lang],
+          value: value.group._id,
+          data: value.group,
+        });
+      }
+
+      return output;
+    },
+    initialData: {},
   });
