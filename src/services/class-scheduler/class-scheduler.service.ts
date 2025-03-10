@@ -5,7 +5,9 @@ import {
   Building,
   CreateBuildingDto,
   CreateRoomDto,
+  CreateStudyPeriodDto,
   Room,
+  StudyPeriod,
 } from "./class-scheduler";
 
 class ClassSchedulerService {
@@ -67,24 +69,30 @@ class ClassSchedulerService {
     );
   }
   //
-  createConfig() {
+  createConfig(dto: CreateStudyPeriodDto) {
     return Client.instance.post<BaseResponse>(
-      `/v1/class-scheduler/schedule/config`
+      `/v1/class-scheduler/schedule/config`,
+      dto
     );
   }
-  getConfigs() {
-    return Client.instance.get<BaseResponse>(
-      `/v1/class-scheduler/schedule/config`
+  getConfigs(academicTerm: string) {
+    return Client.instance.get<BaseResponse<ListResponse<StudyPeriod>>>(
+      `/v1/class-scheduler/schedule/config`,
+      { params: { academicTerm } }
     );
   }
   getConfigById(id: string) {
-    return Client.instance.get<BaseResponse>(
+    return Client.instance.get<BaseResponse<StudyPeriod>>(
       `/v1/class-scheduler/schedule/config/${id}`
     );
   }
-  updateConfigById(id: string) {
+  updateConfigById(
+    id: string,
+    dto: Omit<CreateStudyPeriodDto, "name" | "academicTerm">
+  ) {
     return Client.instance.patch<BaseResponse>(
-      `/v1/class-scheduler/schedule/config/${id}`
+      `/v1/class-scheduler/schedule/config/${id}`,
+      dto
     );
   }
   deleteConfigById(id: string) {

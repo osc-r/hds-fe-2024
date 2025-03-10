@@ -11,7 +11,11 @@ import {
   TextFieldVariants,
   Typography,
 } from "@mui/material";
-import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
+import {
+  LocalizationProvider,
+  MobileDatePicker,
+  MobileTimePicker,
+} from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
   FieldErrors,
@@ -42,7 +46,13 @@ type FormKeys<T> = NestedKeyOf<T>;
 export type FormComponent<T> = {
   name: FormKeys<T> | "";
   label: string;
-  type: "TEXT_INPUT" | "DATE_PICKER" | "EMPTY" | "CHECKBOX" | "SELECT";
+  type:
+    | "TEXT_INPUT"
+    | "DATE_PICKER"
+    | "TIME_PICKER"
+    | "EMPTY"
+    | "CHECKBOX"
+    | "SELECT";
   disabled: boolean;
   size: number;
   labelSize?: number;
@@ -110,7 +120,7 @@ const getInputComponent = <T extends FieldValues>(
     case "DATE_PICKER":
       const dateString = watch(inputProps.name);
       return (
-        <FormControl>
+        <FormControl style={{ width: "100%" }}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <div
               className={
@@ -137,6 +147,45 @@ const getInputComponent = <T extends FieldValues>(
                 }}
                 onChange={() => {}}
                 value={dateString ? dayjs(dateString) : null}
+              />
+            </div>
+          </LocalizationProvider>
+          <FormHelperText error={!!errors[component.name]}>
+            {errors[component.name]?.message as string}
+          </FormHelperText>
+        </FormControl>
+      );
+    case "TIME_PICKER":
+      const timeString = watch(inputProps.name);
+      return (
+        <FormControl style={{ width: "100%" }}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <div
+              className={
+                styles[
+                  !!errors[component.name]
+                    ? "mui-date-picker-error"
+                    : "mui-date-picker"
+                ]
+              }
+            >
+              <MobileTimePicker
+                sx={{ width: "100%", borderColor: "red" }}
+                disabled={component.disabled}
+                {...inputProps}
+                onAccept={(date) => {
+                  inputProps.onChange({
+                    target: {
+                      name: component.name,
+                      value: date?.toISOString(),
+                    },
+                    type: "change",
+                  });
+                }}
+                onChange={() => {}}
+                value={timeString ? dayjs(timeString) : null}
+                ampm={false}
+                ampmInClock={false}
               />
             </div>
           </LocalizationProvider>

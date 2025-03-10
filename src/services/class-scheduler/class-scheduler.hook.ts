@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import classSchedulerService from "./class-scheduler.service";
 import { ClassroomFormType } from "@/components/forms/classroom/ClassroomForm";
 import { ClassroomBuildingFormType } from "@/components/forms/classroom-building/ClassroomBuildingForm";
-import { Building } from "./class-scheduler";
+import { Building, CreateStudyPeriodDto } from "./class-scheduler";
 
 const KEY = "CLASS_SCHEDULER_SERVICE";
 
@@ -120,6 +120,66 @@ export const useUpdateBuildingById = (id: string, onSuccess: () => void) =>
       return (
         await classSchedulerService.updateBuildingById(id as string, body)
       ).data;
+    },
+    onSuccess,
+  });
+
+/** */
+export const useGetScheduleConfig = (academicTerm: string) =>
+  useQuery({
+    queryKey: [KEY, "getConfigs"],
+    queryFn: async () => {
+      return (await classSchedulerService.getConfigs(academicTerm)).data.data
+        .result;
+    },
+    initialData: [],
+  });
+
+export const useCreateStudyPeriod = (onSuccess: () => void) =>
+  useMutation<unknown, unknown, CreateStudyPeriodDto>({
+    mutationFn: async (body) => {
+      return (await classSchedulerService.createConfig(body)).data;
+    },
+    onSuccess,
+  });
+
+export const useGetScheduleConfigById = (id: string) =>
+  useQuery<CreateStudyPeriodDto>({
+    queryKey: [KEY, `getConfigById`, id],
+    queryFn: () =>
+      classSchedulerService.getConfigById(id as string).then((res) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { _id, __v, createdAt, updatedAt, ...rest } = res.data.data;
+        return rest as CreateStudyPeriodDto;
+      }),
+    initialData: {
+      timeSlot: [],
+      academicTerm: "",
+      isStudyOnWeekend: false,
+      name: "",
+    } as CreateStudyPeriodDto,
+  });
+
+export const useDeleteScheduleConfigById = (onSuccess: () => void) =>
+  useMutation<unknown, unknown, string>({
+    mutationFn: async (id) => {
+      return (await classSchedulerService.deleteConfigById(id)).data;
+    },
+    onSuccess,
+  });
+
+export const useUpdateScheduleConfigById = (
+  id: string,
+  onSuccess: () => void
+) =>
+  useMutation<
+    unknown,
+    unknown,
+    Omit<CreateStudyPeriodDto, "name" | "academicTerm">
+  >({
+    mutationFn: async (body) => {
+      return (await classSchedulerService.updateConfigById(id as string, body))
+        .data;
     },
     onSuccess,
   });

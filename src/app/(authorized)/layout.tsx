@@ -56,11 +56,11 @@ const NAVIGATION: Navigation = [
     kind: "header",
     title: "ระบบตารางเรียนตารางสอน",
   },
-  // {
-  //   title: "คาบเรียน",
-  //   icon: <CalendarViewWeekIcon />,
-  //   segment: "study-period",
-  // },
+  {
+    title: "คาบเรียน",
+    icon: <CalendarViewWeekIcon />,
+    segment: "study-period",
+  },
   {
     title: "อาคารเรียน",
     icon: <CalendarViewWeekIcon />,

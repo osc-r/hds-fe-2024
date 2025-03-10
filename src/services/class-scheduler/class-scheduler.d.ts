@@ -29,3 +29,21 @@ export type CreateRoomDto = {
   studyCapacity: number;
   examCapacity: number;
 };
+
+export type CreateStudyPeriodDto = {
+  name: string;
+  isStudyOnWeekend: boolean;
+  academicTerm: string;
+  timeSlot: {
+    startAt: {
+      h: number;
+      m: number;
+    };
+    endAt: {
+      h: number;
+      m: number;
+    };
+  }[];
+};
+
+export type StudyPeriod = CreateStudyPeriodDto & RecordMetadata;
