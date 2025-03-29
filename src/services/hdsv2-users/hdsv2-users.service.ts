@@ -1,5 +1,6 @@
 import Client from "../client";
 import { BaseResponse } from "../type";
+import { Instructor } from "./hdsv2-users";
 
 class Hdsv2UsersService {
   getUsers() {
@@ -13,6 +14,11 @@ class Hdsv2UsersService {
   }
   getUserById(id: string) {
     return Client.instance.get<BaseResponse>(`/v1/hdsv2-users/${id}`);
+  }
+  getInstructors() {
+    return Client.instance.get<BaseResponse<Instructor[]>>(
+      `/v1/hdsv2-users/role/instructors`
+    );
   }
 }
 

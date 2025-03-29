@@ -2,12 +2,16 @@ import Client from "../client";
 import { Option } from "../option/option";
 import { BaseResponse, ListResponse } from "../type";
 import {
+  ActivityOption,
   Building,
   CreateBuildingDto,
   CreateRoomDto,
+  CreateScheduleDto,
   CreateStudyPeriodDto,
+  GetScheduleDto,
   Room,
   StudyPeriod,
+  ViewScheduleResponse,
 } from "./class-scheduler";
 
 class ClassSchedulerService {
@@ -101,17 +105,22 @@ class ClassSchedulerService {
     );
   }
   //
-  createSchedule() {
-    return Client.instance.post<BaseResponse>(`/v1/class-scheduler/schedule`);
-  }
-  getScheduleActivityOption() {
-    return Client.instance.get<BaseResponse>(
-      `/v1/class-scheduler/schedule/activity/option`
+  createSchedule(dto: CreateScheduleDto) {
+    return Client.instance.post<BaseResponse>(
+      `/v1/class-scheduler/schedule`,
+      dto
     );
   }
-  getScheduleByStudentGroupId() {
-    return Client.instance.get<BaseResponse>(
-      `/v1/class-scheduler/schedule/view/by-student-group`
+  getScheduleActivityOption(academicTerm: string) {
+    return Client.instance.get<BaseResponse<ListResponse<ActivityOption>>>(
+      `/v1/class-scheduler/schedule/activity/options`,
+      { params: { academicTerm } }
+    );
+  }
+  getScheduleByStudentGroupId(dto: GetScheduleDto) {
+    return Client.instance.get<BaseResponse<ViewScheduleResponse>>(
+      `/v1/class-scheduler/schedule/view/by-student-group`,
+      { params: dto }
     );
   }
 }

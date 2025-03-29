@@ -2,7 +2,11 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import classSchedulerService from "./class-scheduler.service";
 import { ClassroomFormType } from "@/components/forms/classroom/ClassroomForm";
 import { ClassroomBuildingFormType } from "@/components/forms/classroom-building/ClassroomBuildingForm";
-import { Building, CreateStudyPeriodDto } from "./class-scheduler";
+import {
+  Building,
+  CreateScheduleDto,
+  CreateStudyPeriodDto,
+} from "./class-scheduler";
 
 const KEY = "CLASS_SCHEDULER_SERVICE";
 
@@ -180,6 +184,51 @@ export const useUpdateScheduleConfigById = (
     mutationFn: async (body) => {
       return (await classSchedulerService.updateConfigById(id as string, body))
         .data;
+    },
+    onSuccess,
+  });
+
+export const useGetSchedule = (
+  academicTerm: string,
+  studentGroupId: string,
+  isoWeekday: string
+) =>
+  useQuery({
+    queryKey: [
+      KEY,
+      "getScheduleByStudentGroupId",
+      academicTerm,
+      studentGroupId,
+      isoWeekday,
+    ],
+    queryFn: async () => {
+      return (
+        await classSchedulerService.getScheduleByStudentGroupId({
+          academicTerm,
+          studentGroupId: studentGroupId ? studentGroupId : undefined,
+          isoWeekday: isoWeekday ? isoWeekday : undefined,
+        })
+      ).data.data;
+    },
+    initialData: { periodConfig: [], timetable: [] },
+    enabled: false,
+  });
+
+export const useGetActivityOptions = (academicTerm: string) =>
+  useQuery({
+    queryKey: [KEY, "getScheduleActivityOption", academicTerm],
+    queryFn: async () => {
+      return (
+        await classSchedulerService.getScheduleActivityOption(academicTerm)
+      ).data.data.result;
+    },
+    initialData: [],
+  });
+
+export const useCreateTimetable = (onSuccess: () => void) =>
+  useMutation<unknown, unknown, CreateScheduleDto>({
+    mutationFn: async (body) => {
+      return (await classSchedulerService.createSchedule(body)).data;
     },
     onSuccess,
   });

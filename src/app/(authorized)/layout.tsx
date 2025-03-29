@@ -76,11 +76,11 @@ const NAVIGATION: Navigation = [
     icon: <CalendarViewWeekIcon />,
     segment: "activity",
   },
-  // {
-  //   title: "ตารางเรียนตารางสอน",
-  //   icon: <CalendarViewWeekIcon />,
-  //   segment: "break",
-  // },
+  {
+    title: "ตารางเรียนตารางสอน",
+    icon: <CalendarViewWeekIcon />,
+    segment: "timetable",
+  },
   { kind: "divider" },
   {
     kind: "header",
