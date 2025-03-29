@@ -67,8 +67,8 @@ export default function CreatePage() {
       mutate({
         ...formData,
         subjectList,
-        grade: parseInt(selectedClass?.data.grade) || 0,
-        room: parseInt(selectedClass?.data.room) || 0,
+        grade: parseInt(selectedClass?.data?.grade) || 0,
+        room: parseInt(selectedClass?.data?.room) || 0,
       });
     }
   };

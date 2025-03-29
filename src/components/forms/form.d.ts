@@ -9,5 +9,5 @@ export type FormProps<T> = {
 export type Menu = {
   label: string;
   value: string;
-  [key: string]: Record<string, string> | string;
+  [key: string]: Record<string, string> | string | Map;
 }[];
